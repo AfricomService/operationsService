@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <!--
+        Added the constraints for entity HistoriqueStatutWO.
+    -->
+    <changeSet id="20260312131640-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="work_order_id"
+                                 baseTableName="historique_statut_wo"
+                                 constraintName="fk_historique_statut_wo__work_order_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="work_order"/>
+    </changeSet>
+</databaseChangeLog>
