@@ -1,7 +1,10 @@
 package com.gpm.operations.web.rest;
 
+import com.gpm.operations.domain.enumeration.StatutWO;
+import com.gpm.operations.domain.enumeration.WorkOrderEvent;
 import com.gpm.operations.repository.WorkOrderRepository;
 import com.gpm.operations.service.WorkOrderService;
+import com.gpm.operations.service.WorkOrderStateService;
 import com.gpm.operations.service.dto.WorkOrderDTO;
 import com.gpm.operations.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -43,9 +46,16 @@ public class WorkOrderResource {
 
     private final WorkOrderRepository workOrderRepository;
 
-    public WorkOrderResource(WorkOrderService workOrderService, WorkOrderRepository workOrderRepository) {
+    private final WorkOrderStateService workOrderStateService;
+
+    public WorkOrderResource(
+        WorkOrderService workOrderService,
+        WorkOrderRepository workOrderRepository,
+        WorkOrderStateService workOrderStateService
+    ) {
         this.workOrderService = workOrderService;
         this.workOrderRepository = workOrderRepository;
+        this.workOrderStateService = workOrderStateService;
     }
 
     /**
@@ -179,5 +189,26 @@ public class WorkOrderResource {
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    /**
+     * {@code POST  /work-orders/:id}/transition/:event : Trigger a state transition for an existing workOrder.
+     *
+     * @param id the id of the workOrder to trigger event for.
+     * @param event the event to trigger.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the new status.
+     */
+    @PostMapping("/work-orders/{id}/transition/{event}")
+    public ResponseEntity<StatutWO> triggerTransition(@PathVariable Long id, @PathVariable WorkOrderEvent event) {
+        log.debug("REST request to trigger transition {} on WorkOrder : {}", event, id);
+        try {
+            StatutWO newStatus = workOrderStateService.changeStatus(id, event);
+            return ResponseEntity
+                .ok()
+                .headers(HeaderUtil.createAlert(applicationName, "WorkOrder status changed to " + newStatus, id.toString()))
+                .body(newStatus);
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            throw new BadRequestAlertException(e.getMessage(), ENTITY_NAME, "invalidtransition");
+        }
     }
 }
