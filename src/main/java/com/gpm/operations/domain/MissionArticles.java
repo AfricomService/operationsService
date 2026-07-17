@@ -39,6 +39,12 @@ public class MissionArticles implements Serializable {
     @Column(name = "qte")
     private Integer qte;
 
+    @Column(name = "quantite_planifiee")
+    private Integer quantitePlanifiee;
+
+    @Column(name = "quantite_realisee")
+    private Integer quantiteRealisee;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -119,6 +125,32 @@ public class MissionArticles implements Serializable {
         this.qte = qte;
     }
 
+    public Integer getQuantitePlanifiee() {
+        return this.quantitePlanifiee;
+    }
+
+    public MissionArticles quantitePlanifiee(Integer quantitePlanifiee) {
+        this.setQuantitePlanifiee(quantitePlanifiee);
+        return this;
+    }
+
+    public void setQuantitePlanifiee(Integer quantitePlanifiee) {
+        this.quantitePlanifiee = quantitePlanifiee;
+    }
+
+    public Integer getQuantiteRealisee() {
+        return this.quantiteRealisee;
+    }
+
+    public MissionArticles quantiteRealisee(Integer quantiteRealisee) {
+        this.setQuantiteRealisee(quantiteRealisee);
+        return this;
+    }
+
+    public void setQuantiteRealisee(Integer quantiteRealisee) {
+        this.quantiteRealisee = quantiteRealisee;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -148,6 +180,8 @@ public class MissionArticles implements Serializable {
             ", prixPropose=" + getPrixPropose() +
             ", dateAffectation='" + getDateAffectation() + "'" +
             ", qte=" + getQte() +
+            ", quantitePlanifiee=" + getQuantitePlanifiee() +
+            ", quantiteRealisee=" + getQuantiteRealisee() +
             "}";
     }
 }

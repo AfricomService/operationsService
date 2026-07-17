@@ -54,6 +54,12 @@ class MissionArticlesResourceIT {
     private static final Integer DEFAULT_QTE = 1;
     private static final Integer UPDATED_QTE = 2;
 
+    private static final Integer DEFAULT_QUANTITE_PLANIFIEE = 1;
+    private static final Integer UPDATED_QUANTITE_PLANIFIEE = 2;
+
+    private static final Integer DEFAULT_QUANTITE_REALISEE = 1;
+    private static final Integer UPDATED_QUANTITE_REALISEE = 2;
+
     private static final String ENTITY_API_URL = "/api/mission-articles";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -86,7 +92,9 @@ class MissionArticlesResourceIT {
             .articleId(DEFAULT_ARTICLE_ID)
             .prixPropose(DEFAULT_PRIX_PROPOSE)
             .dateAffectation(DEFAULT_DATE_AFFECTATION)
-            .qte(DEFAULT_QTE);
+            .qte(DEFAULT_QTE)
+            .quantitePlanifiee(DEFAULT_QUANTITE_PLANIFIEE)
+            .quantiteRealisee(DEFAULT_QUANTITE_REALISEE);
         return missionArticles;
     }
 
@@ -102,7 +110,9 @@ class MissionArticlesResourceIT {
             .articleId(UPDATED_ARTICLE_ID)
             .prixPropose(UPDATED_PRIX_PROPOSE)
             .dateAffectation(UPDATED_DATE_AFFECTATION)
-            .qte(UPDATED_QTE);
+            .qte(UPDATED_QTE)
+            .quantitePlanifiee(UPDATED_QUANTITE_PLANIFIEE)
+            .quantiteRealisee(UPDATED_QUANTITE_REALISEE);
         return missionArticles;
     }
 
@@ -135,6 +145,8 @@ class MissionArticlesResourceIT {
         assertThat(testMissionArticles.getPrixPropose()).isEqualByComparingTo(DEFAULT_PRIX_PROPOSE);
         assertThat(testMissionArticles.getDateAffectation()).isEqualTo(DEFAULT_DATE_AFFECTATION);
         assertThat(testMissionArticles.getQte()).isEqualTo(DEFAULT_QTE);
+        assertThat(testMissionArticles.getQuantitePlanifiee()).isEqualTo(DEFAULT_QUANTITE_PLANIFIEE);
+        assertThat(testMissionArticles.getQuantiteRealisee()).isEqualTo(DEFAULT_QUANTITE_REALISEE);
     }
 
     @Test
@@ -177,7 +189,9 @@ class MissionArticlesResourceIT {
             .andExpect(jsonPath("$.[*].articleId").value(hasItem(DEFAULT_ARTICLE_ID.intValue())))
             .andExpect(jsonPath("$.[*].prixPropose").value(hasItem(sameNumber(DEFAULT_PRIX_PROPOSE))))
             .andExpect(jsonPath("$.[*].dateAffectation").value(hasItem(sameInstant(DEFAULT_DATE_AFFECTATION))))
-            .andExpect(jsonPath("$.[*].qte").value(hasItem(DEFAULT_QTE)));
+            .andExpect(jsonPath("$.[*].qte").value(hasItem(DEFAULT_QTE)))
+            .andExpect(jsonPath("$.[*].quantitePlanifiee").value(hasItem(DEFAULT_QUANTITE_PLANIFIEE)))
+            .andExpect(jsonPath("$.[*].quantiteRealisee").value(hasItem(DEFAULT_QUANTITE_REALISEE)));
     }
 
     @Test
@@ -196,7 +210,9 @@ class MissionArticlesResourceIT {
             .andExpect(jsonPath("$.articleId").value(DEFAULT_ARTICLE_ID.intValue()))
             .andExpect(jsonPath("$.prixPropose").value(sameNumber(DEFAULT_PRIX_PROPOSE)))
             .andExpect(jsonPath("$.dateAffectation").value(sameInstant(DEFAULT_DATE_AFFECTATION)))
-            .andExpect(jsonPath("$.qte").value(DEFAULT_QTE));
+            .andExpect(jsonPath("$.qte").value(DEFAULT_QTE))
+            .andExpect(jsonPath("$.quantitePlanifiee").value(DEFAULT_QUANTITE_PLANIFIEE))
+            .andExpect(jsonPath("$.quantiteRealisee").value(DEFAULT_QUANTITE_REALISEE));
     }
 
     @Test
@@ -223,7 +239,9 @@ class MissionArticlesResourceIT {
             .articleId(UPDATED_ARTICLE_ID)
             .prixPropose(UPDATED_PRIX_PROPOSE)
             .dateAffectation(UPDATED_DATE_AFFECTATION)
-            .qte(UPDATED_QTE);
+            .qte(UPDATED_QTE)
+            .quantitePlanifiee(UPDATED_QUANTITE_PLANIFIEE)
+            .quantiteRealisee(UPDATED_QUANTITE_REALISEE);
         MissionArticlesDTO missionArticlesDTO = missionArticlesMapper.toDto(updatedMissionArticles);
 
         restMissionArticlesMockMvc
@@ -244,6 +262,8 @@ class MissionArticlesResourceIT {
         assertThat(testMissionArticles.getPrixPropose()).isEqualByComparingTo(UPDATED_PRIX_PROPOSE);
         assertThat(testMissionArticles.getDateAffectation()).isEqualTo(UPDATED_DATE_AFFECTATION);
         assertThat(testMissionArticles.getQte()).isEqualTo(UPDATED_QTE);
+        assertThat(testMissionArticles.getQuantitePlanifiee()).isEqualTo(UPDATED_QUANTITE_PLANIFIEE);
+        assertThat(testMissionArticles.getQuantiteRealisee()).isEqualTo(UPDATED_QUANTITE_REALISEE);
     }
 
     @Test
@@ -330,7 +350,12 @@ class MissionArticlesResourceIT {
         MissionArticles partialUpdatedMissionArticles = new MissionArticles();
         partialUpdatedMissionArticles.setId(missionArticles.getId());
 
-        partialUpdatedMissionArticles.woId(UPDATED_WO_ID).articleId(UPDATED_ARTICLE_ID).dateAffectation(UPDATED_DATE_AFFECTATION);
+        partialUpdatedMissionArticles
+            .woId(UPDATED_WO_ID)
+            .articleId(UPDATED_ARTICLE_ID)
+            .dateAffectation(UPDATED_DATE_AFFECTATION)
+            .quantitePlanifiee(UPDATED_QUANTITE_PLANIFIEE)
+            .quantiteRealisee(UPDATED_QUANTITE_REALISEE);
 
         restMissionArticlesMockMvc
             .perform(
@@ -350,6 +375,8 @@ class MissionArticlesResourceIT {
         assertThat(testMissionArticles.getPrixPropose()).isEqualByComparingTo(DEFAULT_PRIX_PROPOSE);
         assertThat(testMissionArticles.getDateAffectation()).isEqualTo(UPDATED_DATE_AFFECTATION);
         assertThat(testMissionArticles.getQte()).isEqualTo(DEFAULT_QTE);
+        assertThat(testMissionArticles.getQuantitePlanifiee()).isEqualTo(UPDATED_QUANTITE_PLANIFIEE);
+        assertThat(testMissionArticles.getQuantiteRealisee()).isEqualTo(UPDATED_QUANTITE_REALISEE);
     }
 
     @Test
@@ -369,7 +396,9 @@ class MissionArticlesResourceIT {
             .articleId(UPDATED_ARTICLE_ID)
             .prixPropose(UPDATED_PRIX_PROPOSE)
             .dateAffectation(UPDATED_DATE_AFFECTATION)
-            .qte(UPDATED_QTE);
+            .qte(UPDATED_QTE)
+            .quantitePlanifiee(UPDATED_QUANTITE_PLANIFIEE)
+            .quantiteRealisee(UPDATED_QUANTITE_REALISEE);
 
         restMissionArticlesMockMvc
             .perform(
@@ -389,6 +418,8 @@ class MissionArticlesResourceIT {
         assertThat(testMissionArticles.getPrixPropose()).isEqualByComparingTo(UPDATED_PRIX_PROPOSE);
         assertThat(testMissionArticles.getDateAffectation()).isEqualTo(UPDATED_DATE_AFFECTATION);
         assertThat(testMissionArticles.getQte()).isEqualTo(UPDATED_QTE);
+        assertThat(testMissionArticles.getQuantitePlanifiee()).isEqualTo(UPDATED_QUANTITE_PLANIFIEE);
+        assertThat(testMissionArticles.getQuantiteRealisee()).isEqualTo(UPDATED_QUANTITE_REALISEE);
     }
 
     @Test

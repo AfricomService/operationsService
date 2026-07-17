@@ -23,6 +23,10 @@ public class MissionArticlesDTO implements Serializable {
 
     private Integer qte;
 
+    private Integer quantitePlanifiee;
+
+    private Integer quantiteRealisee;
+
     public Long getId() {
         return id;
     }
@@ -71,6 +75,22 @@ public class MissionArticlesDTO implements Serializable {
         this.qte = qte;
     }
 
+    public Integer getQuantitePlanifiee() {
+        return quantitePlanifiee;
+    }
+
+    public void setQuantitePlanifiee(Integer quantitePlanifiee) {
+        this.quantitePlanifiee = quantitePlanifiee;
+    }
+
+    public Integer getQuantiteRealisee() {
+        return quantiteRealisee;
+    }
+
+    public void setQuantiteRealisee(Integer quantiteRealisee) {
+        this.quantiteRealisee = quantiteRealisee;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -102,6 +122,8 @@ public class MissionArticlesDTO implements Serializable {
             ", prixPropose=" + getPrixPropose() +
             ", dateAffectation='" + getDateAffectation() + "'" +
             ", qte=" + getQte() +
+            ", quantitePlanifiee=" + getQuantitePlanifiee() +
+            ", quantiteRealisee=" + getQuantiteRealisee() +
             "}";
     }
 }
