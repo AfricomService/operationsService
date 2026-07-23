@@ -1,0 +1,43 @@
+{
+  "changelogDate": "20260713131157",
+  "clientRootFolder": "operationsService",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "woId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "articleId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "prixPropose",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "dateAffectation",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "qte",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "quantitePlanifiee",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "quantiteRealisee",
+      "fieldType": "Integer"
+    }
+  ],
+  "jpaMetamodelFiltering": false,
+  "microserviceName": "operationsService",
+  "name": "MissionArticles",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceClass"
+}
