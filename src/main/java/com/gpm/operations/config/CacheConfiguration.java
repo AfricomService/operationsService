@@ -62,6 +62,7 @@ public class CacheConfiguration {
             createCache(cm, com.gpm.operations.domain.WorkOrder.class.getName());
             createCache(cm, com.gpm.operations.domain.WoSite.class.getName());
             createCache(cm, com.gpm.operations.domain.WoUtilisateur.class.getName());
+            createCache(cm, com.gpm.operations.domain.MissionArticles.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

@@ -185,6 +185,7 @@ spring:
   output:
     ansi:
       console-available: true
+
 #  security:
 #    oauth2:
 #      client:
@@ -196,6 +197,7 @@ spring:
 #            client-id: internal
 #            client-secret: internal
 #            scope: openid, profile, email, offline_access # last one for refresh tokens
+
 
 server:
   servlet:
