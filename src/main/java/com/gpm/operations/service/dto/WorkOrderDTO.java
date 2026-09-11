@@ -91,6 +91,10 @@ public class WorkOrderDTO implements Serializable {
 
     private String lieu;
 
+    private Long villeId;
+
+    private Long zoneId;
+
     public Long getId() {
         return id;
     }
@@ -307,6 +311,22 @@ public class WorkOrderDTO implements Serializable {
         this.lieu = lieu;
     }
 
+    public Long getVilleId() {
+        return villeId;
+    }
+
+    public void setVilleId(Long villeId) {
+        this.villeId = villeId;
+    }
+
+    public Long getZoneId() {
+        return zoneId;
+    }
+
+    public void setZoneId(Long zoneId) {
+        this.zoneId = zoneId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -359,6 +379,8 @@ public class WorkOrderDTO implements Serializable {
             ", updatedBy='" + getUpdatedBy() + "'" +
             ", updatedByUserLogin='" + getUpdatedByUserLogin() + "'" +
             ", lieu='" + getLieu() + "'" +
+            ", villeId=" + getVilleId() +
+            ", zoneId=" + getZoneId() +
             "}";
     }
 }

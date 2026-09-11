@@ -123,6 +123,12 @@ public class WorkOrder implements Serializable {
     @Column(name = "lieu")
     private String lieu;
 
+    @Column(name = "ville_id")
+    private Long villeId;
+
+    @Column(name = "zone_id")
+    private Long zoneId;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -476,6 +482,32 @@ public class WorkOrder implements Serializable {
         this.lieu = lieu;
     }
 
+    public Long getVilleId() {
+        return this.villeId;
+    }
+
+    public WorkOrder villeId(Long villeId) {
+        this.setVilleId(villeId);
+        return this;
+    }
+
+    public void setVilleId(Long villeId) {
+        this.villeId = villeId;
+    }
+
+    public Long getZoneId() {
+        return this.zoneId;
+    }
+
+    public WorkOrder zoneId(Long zoneId) {
+        this.setZoneId(zoneId);
+        return this;
+    }
+
+    public void setZoneId(Long zoneId) {
+        this.zoneId = zoneId;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -526,6 +558,8 @@ public class WorkOrder implements Serializable {
             ", updatedBy='" + getUpdatedBy() + "'" +
             ", updatedByUserLogin='" + getUpdatedByUserLogin() + "'" +
             ", lieu='" + getLieu() + "'" +
+            ", villeId=" + getVilleId() +
+            ", zoneId=" + getZoneId() +
             "}";
     }
 }

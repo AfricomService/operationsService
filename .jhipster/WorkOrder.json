@@ -121,6 +121,14 @@
     {
       "fieldName": "lieu",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "villeId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "zoneId",
+      "fieldType": "Long"
     }
   ],
   "fluentMethods": true,
