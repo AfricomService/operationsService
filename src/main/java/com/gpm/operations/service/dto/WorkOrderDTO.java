@@ -10,7 +10,6 @@ import javax.validation.constraints.*;
 /**
  * A DTO for the {@link com.gpm.operations.domain.WorkOrder} entity.
  */
-@SuppressWarnings("common-java:DuplicatedBlocks")
 public class WorkOrderDTO implements Serializable {
 
     private Long id;
@@ -89,6 +88,8 @@ public class WorkOrderDTO implements Serializable {
     private String updatedBy;
 
     private String updatedByUserLogin;
+
+    private String lieu;
 
     public Long getId() {
         return id;
@@ -298,6 +299,14 @@ public class WorkOrderDTO implements Serializable {
         this.updatedByUserLogin = updatedByUserLogin;
     }
 
+    public String getLieu() {
+        return lieu;
+    }
+
+    public void setLieu(String lieu) {
+        this.lieu = lieu;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -349,6 +358,7 @@ public class WorkOrderDTO implements Serializable {
             ", createdByUserLogin='" + getCreatedByUserLogin() + "'" +
             ", updatedBy='" + getUpdatedBy() + "'" +
             ", updatedByUserLogin='" + getUpdatedByUserLogin() + "'" +
+            ", lieu='" + getLieu() + "'" +
             "}";
     }
 }

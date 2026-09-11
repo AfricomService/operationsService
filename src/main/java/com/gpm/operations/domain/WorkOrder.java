@@ -14,7 +14,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "work_order")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@SuppressWarnings("common-java:DuplicatedBlocks")
 public class WorkOrder implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -120,6 +119,9 @@ public class WorkOrder implements Serializable {
 
     @Column(name = "updated_by_user_login")
     private String updatedByUserLogin;
+
+    @Column(name = "lieu")
+    private String lieu;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -461,6 +463,19 @@ public class WorkOrder implements Serializable {
         this.updatedByUserLogin = updatedByUserLogin;
     }
 
+    public String getLieu() {
+        return this.lieu;
+    }
+
+    public WorkOrder lieu(String lieu) {
+        this.setLieu(lieu);
+        return this;
+    }
+
+    public void setLieu(String lieu) {
+        this.lieu = lieu;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -510,6 +525,7 @@ public class WorkOrder implements Serializable {
             ", createdByUserLogin='" + getCreatedByUserLogin() + "'" +
             ", updatedBy='" + getUpdatedBy() + "'" +
             ", updatedByUserLogin='" + getUpdatedByUserLogin() + "'" +
+            ", lieu='" + getLieu() + "'" +
             "}";
     }
 }

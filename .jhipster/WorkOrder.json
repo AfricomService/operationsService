@@ -117,6 +117,10 @@
     {
       "fieldName": "updatedByUserLogin",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "lieu",
+      "fieldType": "String"
     }
   ],
   "fluentMethods": true,
