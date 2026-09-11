@@ -159,6 +159,34 @@ public class WorkOrderTechniciensResource {
     }
 
     /**
+     * {@code GET  /work-order-techniciens/by-work-order/:workOrderId} : get all techniciens linked to a work order.
+     *
+     * @param workOrderId the id of the work order.
+     * @return the list of linked WorkOrderTechniciensDTO.
+     */
+    @GetMapping("/work-order-techniciens/by-work-order/{workOrderId}")
+    public List<WorkOrderTechniciensDTO> getTechniciensByWorkOrder(@PathVariable Long workOrderId) {
+        log.debug("REST request to get WorkOrderTechniciens by workOrder : {}", workOrderId);
+        return workOrderTechniciensService.findByWorkOrderId(workOrderId);
+    }
+
+    /**
+     * {@code PUT  /work-order-techniciens/by-work-order/:workOrderId} : replace the full list of techniciens for a work order.
+     *
+     * @param workOrderId the id of the work order.
+     * @param contactSocieteIds the ids of the selected contacts (role TECHNIQUE).
+     * @return the persisted list of WorkOrderTechniciensDTO.
+     */
+    @PutMapping("/work-order-techniciens/by-work-order/{workOrderId}")
+    public List<WorkOrderTechniciensDTO> replaceTechniciensForWorkOrder(
+        @PathVariable Long workOrderId,
+        @RequestBody List<Long> contactSocieteIds
+    ) {
+        log.debug("REST request to replace WorkOrderTechniciens for workOrder : {}, {}", workOrderId, contactSocieteIds);
+        return workOrderTechniciensService.replaceForWorkOrder(workOrderId, contactSocieteIds);
+    }
+
+    /**
      * {@code DELETE  /work-order-techniciens/:id} : delete the "id" workOrderTechniciens.
      *
      * @param id the id of the workOrderTechniciensDTO to delete.

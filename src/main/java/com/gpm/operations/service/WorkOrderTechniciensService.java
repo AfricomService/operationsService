@@ -95,6 +95,47 @@ public class WorkOrderTechniciensService {
     }
 
     /**
+     * Get all the workOrderTechniciens linked to a given work order.
+     *
+     * @param workOrderId the id of the work order.
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<WorkOrderTechniciensDTO> findByWorkOrderId(Long workOrderId) {
+        log.debug("Request to get WorkOrderTechniciens by workOrder : {}", workOrderId);
+        return workOrderTechniciensRepository
+            .findByWorkOrderId(workOrderId)
+            .stream()
+            .map(workOrderTechniciensMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    /**
+     * Replace the full list of techniciens linked to a work order
+     * (deletes the existing links, then re-creates them from the given contact ids).
+     *
+     * @param workOrderId the id of the work order.
+     * @param contactSocieteIds the ids of the selected contacts (role TECHNIQUE).
+     * @return the persisted entities.
+     */
+    public List<WorkOrderTechniciensDTO> replaceForWorkOrder(Long workOrderId, List<Long> contactSocieteIds) {
+        log.debug("Request to replace WorkOrderTechniciens for workOrder : {}, {}", workOrderId, contactSocieteIds);
+
+        workOrderTechniciensRepository.deleteByWorkOrderId(workOrderId);
+
+        List<WorkOrderTechniciens> entities = contactSocieteIds
+            .stream()
+            .map(contactId -> new WorkOrderTechniciens().workOrderId(workOrderId).contactSocieteId(contactId))
+            .collect(Collectors.toCollection(LinkedList::new));
+
+        return workOrderTechniciensRepository
+            .saveAll(entities)
+            .stream()
+            .map(workOrderTechniciensMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    /**
      * Delete the workOrderTechniciens by id.
      *
      * @param id the id of the entity.

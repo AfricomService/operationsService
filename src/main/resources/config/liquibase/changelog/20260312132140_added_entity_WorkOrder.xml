@@ -98,6 +98,15 @@
             <column name="zone_id" type="bigint">
                 <constraints nullable="true" />
             </column>
+            <column name="responsable_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="coordinateur" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="identifiant_unique" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
         <dropDefaultValue tableName="work_order" columnName="date_heure_debut_prev" columnDataType="${datetimeType}"/>
@@ -153,6 +162,9 @@
             <column name="lieu" type="string"/>
             <column name="ville_id" type="numeric"/>
             <column name="zone_id" type="numeric"/>
+            <column name="responsable_id" type="numeric"/>
+            <column name="coordinateur" type="numeric"/>
+            <column name="identifiant_unique" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

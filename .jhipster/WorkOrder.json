@@ -129,6 +129,18 @@
     {
       "fieldName": "zoneId",
       "fieldType": "Long"
+    },
+    {
+      "fieldName": "responsableId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "coordinateur",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "identifiantUnique",
+      "fieldType": "String"
     }
   ],
   "fluentMethods": true,

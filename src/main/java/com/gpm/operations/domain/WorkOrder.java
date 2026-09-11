@@ -129,6 +129,15 @@ public class WorkOrder implements Serializable {
     @Column(name = "zone_id")
     private Long zoneId;
 
+    @Column(name = "responsable_id")
+    private Long responsableId;
+
+    @Column(name = "coordinateur")
+    private Long coordinateur;
+
+    @Column(name = "identifiant_unique")
+    private String identifiantUnique;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -508,6 +517,45 @@ public class WorkOrder implements Serializable {
         this.zoneId = zoneId;
     }
 
+    public Long getResponsableId() {
+        return this.responsableId;
+    }
+
+    public WorkOrder responsableId(Long responsableId) {
+        this.setResponsableId(responsableId);
+        return this;
+    }
+
+    public void setResponsableId(Long responsableId) {
+        this.responsableId = responsableId;
+    }
+
+    public Long getCoordinateur() {
+        return this.coordinateur;
+    }
+
+    public WorkOrder coordinateur(Long coordinateur) {
+        this.setCoordinateur(coordinateur);
+        return this;
+    }
+
+    public void setCoordinateur(Long coordinateur) {
+        this.coordinateur = coordinateur;
+    }
+
+    public String getIdentifiantUnique() {
+        return this.identifiantUnique;
+    }
+
+    public WorkOrder identifiantUnique(String identifiantUnique) {
+        this.setIdentifiantUnique(identifiantUnique);
+        return this;
+    }
+
+    public void setIdentifiantUnique(String identifiantUnique) {
+        this.identifiantUnique = identifiantUnique;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -560,6 +608,9 @@ public class WorkOrder implements Serializable {
             ", lieu='" + getLieu() + "'" +
             ", villeId=" + getVilleId() +
             ", zoneId=" + getZoneId() +
+            ", responsableId=" + getResponsableId() +
+            ", coordinateur=" + getCoordinateur() +
+            ", identifiantUnique='" + getIdentifiantUnique() + "'" +
             "}";
     }
 }
