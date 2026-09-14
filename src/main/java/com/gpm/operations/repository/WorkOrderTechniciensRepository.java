@@ -14,5 +14,7 @@ import java.util.List;
 public interface WorkOrderTechniciensRepository extends JpaRepository<WorkOrderTechniciens, Long> {
     List<WorkOrderTechniciens> findByWorkOrderId(Long workOrderId);
 
+    List<WorkOrderTechniciens> findByContactSocieteIdIn(List<Long> contactSocieteIds);
+
     void deleteByWorkOrderId(Long workOrderId);
 }

@@ -1,17 +1,24 @@
 package com.gpm.operations.service;
 
+import com.gpm.operations.domain.WorkOrder;
 import com.gpm.operations.domain.WorkOrderTechniciens;
+import com.gpm.operations.repository.WorkOrderRepository;
 import com.gpm.operations.repository.WorkOrderTechniciensRepository;
+import com.gpm.operations.service.dto.TechnicienConflictDTO;
 import com.gpm.operations.service.dto.WorkOrderTechniciensDTO;
 import com.gpm.operations.service.mapper.WorkOrderTechniciensMapper;
+
+import java.time.ZonedDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 /**
  * Service Implementation for managing {@link WorkOrderTechniciens}.
@@ -26,12 +33,16 @@ public class WorkOrderTechniciensService {
 
     private final WorkOrderTechniciensMapper workOrderTechniciensMapper;
 
+    private final WorkOrderRepository workOrderRepository;
+
     public WorkOrderTechniciensService(
         WorkOrderTechniciensRepository workOrderTechniciensRepository,
-        WorkOrderTechniciensMapper workOrderTechniciensMapper
+        WorkOrderTechniciensMapper workOrderTechniciensMapper,
+        WorkOrderRepository workOrderRepository
     ) {
         this.workOrderTechniciensRepository = workOrderTechniciensRepository;
         this.workOrderTechniciensMapper = workOrderTechniciensMapper;
+        this.workOrderRepository = workOrderRepository;
     }
 
     /**
@@ -108,6 +119,65 @@ public class WorkOrderTechniciensService {
             .stream()
             .map(workOrderTechniciensMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    /**
+     * Vérifie si les techniciens donnés sont déjà affectés à un autre WorkOrder
+     * dont la mission n'est pas encore terminée (dateHeureFinPrev dans le futur).
+     *
+     * @param contactSocieteIds les ids des techniciens à vérifier.
+     * @param excludeWorkOrderId le work order courant à exclure (mode édition), peut être null.
+     * @return la liste des conflits détectés (vide si tous disponibles).
+     */
+    @Transactional(readOnly = true)
+    public List<TechnicienConflictDTO> findConflicts(List<Long> contactSocieteIds, Long excludeWorkOrderId) {
+        log.debug("Request to check technicien disponibilité : {}, exclude={}", contactSocieteIds, excludeWorkOrderId);
+
+        if (contactSocieteIds == null || contactSocieteIds.isEmpty()) {
+            return List.of();
+        }
+
+        List<WorkOrderTechniciens> links = workOrderTechniciensRepository.findByContactSocieteIdIn(contactSocieteIds);
+
+        if (links.isEmpty()) {
+            return List.of();
+        }
+
+        List<Long> workOrderIds = links.stream().map(WorkOrderTechniciens::getWorkOrderId).distinct().collect(Collectors.toList());
+
+        Map<Long, WorkOrder> workOrdersById = workOrderRepository
+            .findAllById(workOrderIds)
+            .stream()
+            .collect(Collectors.toMap(WorkOrder::getId, wo -> wo));
+
+        ZonedDateTime now = ZonedDateTime.now();
+        List<TechnicienConflictDTO> conflicts = new LinkedList<>();
+
+        for (WorkOrderTechniciens link : links) {
+            WorkOrder wo = workOrdersById.get(link.getWorkOrderId());
+
+            if (wo == null || wo.getDateHeureFinPrev() == null) {
+                continue;
+            }
+            // Ignore le work order courant (mode édition)
+            if (excludeWorkOrderId != null && excludeWorkOrderId.equals(wo.getId())) {
+                continue;
+            }
+            // Mission pas encore terminée => conflit
+            if (wo.getDateHeureFinPrev().isAfter(now)) {
+                conflicts.add(
+                    new TechnicienConflictDTO(
+                        link.getContactSocieteId(),
+                        wo.getId(),
+                        wo.getNumFicheIntervention(),
+                        wo.getIdentifiantUnique(),
+                        wo.getDateHeureFinPrev()
+                    )
+                );
+            }
+        }
+
+        return conflicts;
     }
 
     /**

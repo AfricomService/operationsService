@@ -2,6 +2,7 @@ package com.gpm.operations.web.rest;
 
 import com.gpm.operations.repository.WorkOrderTechniciensRepository;
 import com.gpm.operations.service.WorkOrderTechniciensService;
+import com.gpm.operations.service.dto.TechnicienConflictDTO;
 import com.gpm.operations.service.dto.WorkOrderTechniciensDTO;
 import com.gpm.operations.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -168,6 +169,19 @@ public class WorkOrderTechniciensResource {
     public List<WorkOrderTechniciensDTO> getTechniciensByWorkOrder(@PathVariable Long workOrderId) {
         log.debug("REST request to get WorkOrderTechniciens by workOrder : {}", workOrderId);
         return workOrderTechniciensService.findByWorkOrderId(workOrderId);
+    }
+
+    /**
+     * {@code GET /work-order-techniciens/check-disponibilite} : vérifie si des techniciens sont
+     * déjà affectés à un work order en cours (dateHeureFinPrev non dépassée).
+     */
+    @GetMapping("/work-order-techniciens/check-disponibilite")
+    public List<TechnicienConflictDTO> checkDisponibilite(
+        @RequestParam List<Long> contactSocieteIds,
+        @RequestParam(required = false) Long excludeWorkOrderId
+    ) {
+        log.debug("REST request to check disponibilité : {}, exclude={}", contactSocieteIds, excludeWorkOrderId);
+        return workOrderTechniciensService.findConflicts(contactSocieteIds, excludeWorkOrderId);
     }
 
     /**
