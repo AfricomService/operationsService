@@ -1,0 +1,23 @@
+{
+  "microserviceName": "operationsService",
+  "clientRootFolder": "operationsService",
+  "databaseType": "sql",
+  "fields": [
+    {
+      "fieldName": "workOrderId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "ressourceId",
+      "fieldType": "Long"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceClass",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": false,
+  "readOnly": false,
+  "pagination": "no",
+  "name": "WorkOrderRessource",
+  "changelogDate": "20260917131432"
+}
