@@ -2,6 +2,7 @@ package com.gpm.operations.web.rest;
 
 import com.gpm.operations.repository.WorkOrderRessourceRepository;
 import com.gpm.operations.service.WorkOrderRessourceService;
+import com.gpm.operations.service.dto.RessourceConflictDTO;
 import com.gpm.operations.service.dto.WorkOrderRessourceDTO;
 import com.gpm.operations.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -43,13 +44,6 @@ public class WorkOrderRessourceResource {
         this.workOrderRessourceRepository = workOrderRessourceRepository;
     }
 
-    /**
-     * {@code POST  /work-order-ressources} : Create a new workOrderRessource.
-     *
-     * @param workOrderRessourceDTO the workOrderRessourceDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new workOrderRessourceDTO, or with status {@code 400 (Bad Request)} if the workOrderRessource has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PostMapping("/work-order-ressources")
     public ResponseEntity<WorkOrderRessourceDTO> createWorkOrderRessource(@RequestBody WorkOrderRessourceDTO workOrderRessourceDTO)
         throws URISyntaxException {
@@ -64,16 +58,6 @@ public class WorkOrderRessourceResource {
             .body(result);
     }
 
-    /**
-     * {@code PUT  /work-order-ressources/:id} : Updates an existing workOrderRessource.
-     *
-     * @param id the id of the workOrderRessourceDTO to save.
-     * @param workOrderRessourceDTO the workOrderRessourceDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated workOrderRessourceDTO,
-     * or with status {@code 400 (Bad Request)} if the workOrderRessourceDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the workOrderRessourceDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PutMapping("/work-order-ressources/{id}")
     public ResponseEntity<WorkOrderRessourceDTO> updateWorkOrderRessource(
         @PathVariable(value = "id", required = false) final Long id,
@@ -98,17 +82,6 @@ public class WorkOrderRessourceResource {
             .body(result);
     }
 
-    /**
-     * {@code PATCH  /work-order-ressources/:id} : Partial updates given fields of an existing workOrderRessource, field will ignore if it is null
-     *
-     * @param id the id of the workOrderRessourceDTO to save.
-     * @param workOrderRessourceDTO the workOrderRessourceDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated workOrderRessourceDTO,
-     * or with status {@code 400 (Bad Request)} if the workOrderRessourceDTO is not valid,
-     * or with status {@code 404 (Not Found)} if the workOrderRessourceDTO is not found,
-     * or with status {@code 500 (Internal Server Error)} if the workOrderRessourceDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PatchMapping(value = "/work-order-ressources/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<WorkOrderRessourceDTO> partialUpdateWorkOrderRessource(
         @PathVariable(value = "id", required = false) final Long id,
@@ -134,23 +107,12 @@ public class WorkOrderRessourceResource {
         );
     }
 
-    /**
-     * {@code GET  /work-order-ressources} : get all the workOrderRessources.
-     *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of workOrderRessources in body.
-     */
     @GetMapping("/work-order-ressources")
     public List<WorkOrderRessourceDTO> getAllWorkOrderRessources() {
         log.debug("REST request to get all WorkOrderRessources");
         return workOrderRessourceService.findAll();
     }
 
-    /**
-     * {@code GET  /work-order-ressources/:id} : get the "id" workOrderRessource.
-     *
-     * @param id the id of the workOrderRessourceDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the workOrderRessourceDTO, or with status {@code 404 (Not Found)}.
-     */
     @GetMapping("/work-order-ressources/{id}")
     public ResponseEntity<WorkOrderRessourceDTO> getWorkOrderRessource(@PathVariable Long id) {
         log.debug("REST request to get WorkOrderRessource : {}", id);
@@ -159,11 +121,39 @@ public class WorkOrderRessourceResource {
     }
 
     /**
-     * {@code DELETE  /work-order-ressources/:id} : delete the "id" workOrderRessource.
-     *
-     * @param id the id of the workOrderRessourceDTO to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     * {@code GET /work-order-ressources/by-work-order/:workOrderId} : get all ressources linked to a work order.
      */
+    @GetMapping("/work-order-ressources/by-work-order/{workOrderId}")
+    public List<WorkOrderRessourceDTO> getRessourcesByWorkOrder(@PathVariable Long workOrderId) {
+        log.debug("REST request to get WorkOrderRessources by workOrder : {}", workOrderId);
+        return workOrderRessourceService.findByWorkOrderId(workOrderId);
+    }
+
+    /**
+     * {@code GET /work-order-ressources/check-disponibilite} : vérifie si des ressources sont
+     * déjà affectées à un work order en cours (dateHeureFinPrev non dépassée).
+     */
+    @GetMapping("/work-order-ressources/check-disponibilite")
+    public List<RessourceConflictDTO> checkDisponibilite(
+        @RequestParam List<Long> ressourceIds,
+        @RequestParam(required = false) Long excludeWorkOrderId
+    ) {
+        log.debug("REST request to check disponibilité : {}, exclude={}", ressourceIds, excludeWorkOrderId);
+        return workOrderRessourceService.findConflicts(ressourceIds, excludeWorkOrderId);
+    }
+
+    /**
+     * {@code PUT /work-order-ressources/by-work-order/:workOrderId} : replace the full list of ressources for a work order.
+     */
+    @PutMapping("/work-order-ressources/by-work-order/{workOrderId}")
+    public List<WorkOrderRessourceDTO> replaceRessourcesForWorkOrder(
+        @PathVariable Long workOrderId,
+        @RequestBody List<Long> ressourceIds
+    ) {
+        log.debug("REST request to replace WorkOrderRessources for workOrder : {}, {}", workOrderId, ressourceIds);
+        return workOrderRessourceService.replaceForWorkOrder(workOrderId, ressourceIds);
+    }
+
     @DeleteMapping("/work-order-ressources/{id}")
     public ResponseEntity<Void> deleteWorkOrderRessource(@PathVariable Long id) {
         log.debug("REST request to delete WorkOrderRessource : {}", id);
