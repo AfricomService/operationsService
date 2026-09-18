@@ -14,7 +14,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "work_order")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@SuppressWarnings("common-java:DuplicatedBlocks")
 public class WorkOrder implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -120,6 +119,24 @@ public class WorkOrder implements Serializable {
 
     @Column(name = "updated_by_user_login")
     private String updatedByUserLogin;
+
+    @Column(name = "lieu")
+    private String lieu;
+
+    @Column(name = "ville_id")
+    private Long villeId;
+
+    @Column(name = "zone_id")
+    private Long zoneId;
+
+    @Column(name = "responsable_id")
+    private Long responsableId;
+
+    @Column(name = "coordinateur")
+    private Long coordinateur;
+
+    @Column(name = "identifiant_unique")
+    private String identifiantUnique;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -461,6 +478,84 @@ public class WorkOrder implements Serializable {
         this.updatedByUserLogin = updatedByUserLogin;
     }
 
+    public String getLieu() {
+        return this.lieu;
+    }
+
+    public WorkOrder lieu(String lieu) {
+        this.setLieu(lieu);
+        return this;
+    }
+
+    public void setLieu(String lieu) {
+        this.lieu = lieu;
+    }
+
+    public Long getVilleId() {
+        return this.villeId;
+    }
+
+    public WorkOrder villeId(Long villeId) {
+        this.setVilleId(villeId);
+        return this;
+    }
+
+    public void setVilleId(Long villeId) {
+        this.villeId = villeId;
+    }
+
+    public Long getZoneId() {
+        return this.zoneId;
+    }
+
+    public WorkOrder zoneId(Long zoneId) {
+        this.setZoneId(zoneId);
+        return this;
+    }
+
+    public void setZoneId(Long zoneId) {
+        this.zoneId = zoneId;
+    }
+
+    public Long getResponsableId() {
+        return this.responsableId;
+    }
+
+    public WorkOrder responsableId(Long responsableId) {
+        this.setResponsableId(responsableId);
+        return this;
+    }
+
+    public void setResponsableId(Long responsableId) {
+        this.responsableId = responsableId;
+    }
+
+    public Long getCoordinateur() {
+        return this.coordinateur;
+    }
+
+    public WorkOrder coordinateur(Long coordinateur) {
+        this.setCoordinateur(coordinateur);
+        return this;
+    }
+
+    public void setCoordinateur(Long coordinateur) {
+        this.coordinateur = coordinateur;
+    }
+
+    public String getIdentifiantUnique() {
+        return this.identifiantUnique;
+    }
+
+    public WorkOrder identifiantUnique(String identifiantUnique) {
+        this.setIdentifiantUnique(identifiantUnique);
+        return this;
+    }
+
+    public void setIdentifiantUnique(String identifiantUnique) {
+        this.identifiantUnique = identifiantUnique;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -510,6 +605,12 @@ public class WorkOrder implements Serializable {
             ", createdByUserLogin='" + getCreatedByUserLogin() + "'" +
             ", updatedBy='" + getUpdatedBy() + "'" +
             ", updatedByUserLogin='" + getUpdatedByUserLogin() + "'" +
+            ", lieu='" + getLieu() + "'" +
+            ", villeId=" + getVilleId() +
+            ", zoneId=" + getZoneId() +
+            ", responsableId=" + getResponsableId() +
+            ", coordinateur=" + getCoordinateur() +
+            ", identifiantUnique='" + getIdentifiantUnique() + "'" +
             "}";
     }
 }

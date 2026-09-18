@@ -1,6 +1,7 @@
 package com.gpm.operations.service;
 
 import com.gpm.operations.domain.WorkOrder;
+import com.gpm.operations.domain.enumeration.StatutWO;
 import com.gpm.operations.repository.WorkOrderRepository;
 import com.gpm.operations.service.dto.WorkOrderDTO;
 import com.gpm.operations.service.mapper.WorkOrderMapper;
@@ -38,6 +39,11 @@ public class WorkOrderService {
      */
     public WorkOrderDTO save(WorkOrderDTO workOrderDTO) {
         log.debug("Request to save WorkOrder : {}", workOrderDTO);
+
+        // Un nouveau WorkOrder démarre toujours avec le statut "Creation",
+        // quelle que soit la valeur envoyée par le client.
+        workOrderDTO.setStatut(StatutWO.Creation);
+
         WorkOrder workOrder = workOrderMapper.toEntity(workOrderDTO);
         workOrder = workOrderRepository.save(workOrder);
         return workOrderMapper.toDto(workOrder);

@@ -10,7 +10,6 @@ import javax.validation.constraints.*;
 /**
  * A DTO for the {@link com.gpm.operations.domain.WorkOrder} entity.
  */
-@SuppressWarnings("common-java:DuplicatedBlocks")
 public class WorkOrderDTO implements Serializable {
 
     private Long id;
@@ -89,6 +88,18 @@ public class WorkOrderDTO implements Serializable {
     private String updatedBy;
 
     private String updatedByUserLogin;
+
+    private String lieu;
+
+    private Long villeId;
+
+    private Long zoneId;
+
+    private Long responsableId;
+
+    private Long coordinateur;
+
+    private String identifiantUnique;
 
     public Long getId() {
         return id;
@@ -298,6 +309,54 @@ public class WorkOrderDTO implements Serializable {
         this.updatedByUserLogin = updatedByUserLogin;
     }
 
+    public String getLieu() {
+        return lieu;
+    }
+
+    public void setLieu(String lieu) {
+        this.lieu = lieu;
+    }
+
+    public Long getVilleId() {
+        return villeId;
+    }
+
+    public void setVilleId(Long villeId) {
+        this.villeId = villeId;
+    }
+
+    public Long getZoneId() {
+        return zoneId;
+    }
+
+    public void setZoneId(Long zoneId) {
+        this.zoneId = zoneId;
+    }
+
+    public Long getResponsableId() {
+        return responsableId;
+    }
+
+    public void setResponsableId(Long responsableId) {
+        this.responsableId = responsableId;
+    }
+
+    public Long getCoordinateur() {
+        return coordinateur;
+    }
+
+    public void setCoordinateur(Long coordinateur) {
+        this.coordinateur = coordinateur;
+    }
+
+    public String getIdentifiantUnique() {
+        return identifiantUnique;
+    }
+
+    public void setIdentifiantUnique(String identifiantUnique) {
+        this.identifiantUnique = identifiantUnique;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -349,6 +408,12 @@ public class WorkOrderDTO implements Serializable {
             ", createdByUserLogin='" + getCreatedByUserLogin() + "'" +
             ", updatedBy='" + getUpdatedBy() + "'" +
             ", updatedByUserLogin='" + getUpdatedByUserLogin() + "'" +
+            ", lieu='" + getLieu() + "'" +
+            ", villeId=" + getVilleId() +
+            ", zoneId=" + getZoneId() +
+            ", responsableId=" + getResponsableId() +
+            ", coordinateur=" + getCoordinateur() +
+            ", identifiantUnique='" + getIdentifiantUnique() + "'" +
             "}";
     }
 }
