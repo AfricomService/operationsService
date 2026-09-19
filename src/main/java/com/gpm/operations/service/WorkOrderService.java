@@ -57,6 +57,14 @@ public class WorkOrderService {
      */
     public WorkOrderDTO update(WorkOrderDTO workOrderDTO) {
         log.debug("Request to update WorkOrder : {}", workOrderDTO);
+
+        // Le statut ne peut changer que via /work-orders/{id}/transition/{event}
+        StatutWO currentStatut = workOrderRepository
+            .findById(workOrderDTO.getId())
+            .map(WorkOrder::getStatut)
+            .orElseThrow(() -> new IllegalArgumentException("WorkOrder not found: " + workOrderDTO.getId()));
+        workOrderDTO.setStatut(currentStatut);
+
         WorkOrder workOrder = workOrderMapper.toEntity(workOrderDTO);
         workOrder = workOrderRepository.save(workOrder);
         return workOrderMapper.toDto(workOrder);
@@ -70,6 +78,9 @@ public class WorkOrderService {
      */
     public Optional<WorkOrderDTO> partialUpdate(WorkOrderDTO workOrderDTO) {
         log.debug("Request to partially update WorkOrder : {}", workOrderDTO);
+
+// Interdit de modifier le statut par PATCH (null = ignoré par le mapper)
+        workOrderDTO.setStatut(null);
 
         return workOrderRepository
             .findById(workOrderDTO.getId())
