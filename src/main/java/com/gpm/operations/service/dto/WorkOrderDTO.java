@@ -101,6 +101,8 @@ public class WorkOrderDTO implements Serializable {
 
     private String identifiantUnique;
 
+    private Long siteId;
+
     public Long getId() {
         return id;
     }
@@ -357,6 +359,14 @@ public class WorkOrderDTO implements Serializable {
         this.identifiantUnique = identifiantUnique;
     }
 
+    public Long getSiteId() {
+        return siteId;
+    }
+
+    public void setSiteId(Long siteId) {
+        this.siteId = siteId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -414,6 +424,7 @@ public class WorkOrderDTO implements Serializable {
             ", responsableId=" + getResponsableId() +
             ", coordinateur=" + getCoordinateur() +
             ", identifiantUnique='" + getIdentifiantUnique() + "'" +
+            ", siteId=" + getSiteId() +
             "}";
     }
 }

@@ -5,6 +5,7 @@ import com.gpm.operations.domain.enumeration.StatutWO;
 import com.gpm.operations.repository.WorkOrderRepository;
 import com.gpm.operations.service.dto.WorkOrderDTO;
 import com.gpm.operations.service.mapper.WorkOrderMapper;
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,6 +104,30 @@ public class WorkOrderService {
     public Page<WorkOrderDTO> findAll(Pageable pageable) {
         log.debug("Request to get all WorkOrders");
         return workOrderRepository.findAll(pageable).map(workOrderMapper::toDto);
+    }
+
+    /**
+     * Get all the workOrders, optionnellement filtrés par statut, client et recherche texte.
+     *
+     * @param pageable   the pagination information.
+     * @param statut     le statut à filtrer ; si {@code null}, ce filtre est ignoré.
+     * @param clientId   le client à filtrer ; si {@code null}, ce filtre est ignoré.
+     * @param search     texte recherché dans l'identifiant unique ; vide/null = ignoré.
+     * @param affaireIds ids d'affaires (résolus côté projectservice) à inclure dans la recherche.
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public Page<WorkOrderDTO> findAllByStatut(
+        Pageable pageable,
+        StatutWO statut,
+        Long clientId,
+        String search,
+        List<Long> affaireIds
+    ) {
+        log.debug("Request to get all WorkOrders with statut : {}, clientId : {}, search : {}", statut, clientId, search);
+        String term = search == null ? "" : search.trim();
+        List<Long> ids = (affaireIds == null || affaireIds.isEmpty()) ? List.of(-1L) : affaireIds;
+        return workOrderRepository.findAllWithFilters(statut, clientId, term, ids, pageable).map(workOrderMapper::toDto);
     }
 
     /**

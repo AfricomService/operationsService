@@ -141,6 +141,10 @@
     {
       "fieldName": "identifiantUnique",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "siteId",
+      "fieldType": "Long"
     }
   ],
   "fluentMethods": true,
