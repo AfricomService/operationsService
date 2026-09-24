@@ -155,9 +155,15 @@ public class WorkOrderResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of workOrders in body.
      */
     @GetMapping("/work-orders")
-    public ResponseEntity<List<WorkOrderDTO>> getAllWorkOrders(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
-        log.debug("REST request to get a page of WorkOrders");
-        Page<WorkOrderDTO> page = workOrderService.findAll(pageable);
+    public ResponseEntity<List<WorkOrderDTO>> getAllWorkOrders(
+        @org.springdoc.api.annotations.ParameterObject Pageable pageable,
+        @RequestParam(required = false) StatutWO statut,
+        @RequestParam(required = false) Long clientId,
+        @RequestParam(required = false) String search,
+        @RequestParam(required = false) List<Long> affaireIds
+    ) {
+        log.debug("REST request to get a page of WorkOrders, statut={}, clientId={}, search={}", statut, clientId, search);
+        Page<WorkOrderDTO> page = workOrderService.findAllByStatut(pageable, statut, clientId, search, affaireIds);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
