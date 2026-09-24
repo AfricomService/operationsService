@@ -138,6 +138,9 @@ public class WorkOrder implements Serializable {
     @Column(name = "identifiant_unique")
     private String identifiantUnique;
 
+    @Column(name = "site_id")
+    private Long siteId;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -556,6 +559,19 @@ public class WorkOrder implements Serializable {
         this.identifiantUnique = identifiantUnique;
     }
 
+    public Long getSiteId() {
+        return this.siteId;
+    }
+
+    public WorkOrder siteId(Long siteId) {
+        this.setSiteId(siteId);
+        return this;
+    }
+
+    public void setSiteId(Long siteId) {
+        this.siteId = siteId;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -611,6 +627,7 @@ public class WorkOrder implements Serializable {
             ", responsableId=" + getResponsableId() +
             ", coordinateur=" + getCoordinateur() +
             ", identifiantUnique='" + getIdentifiantUnique() + "'" +
+            ", siteId=" + getSiteId() +
             "}";
     }
 }
