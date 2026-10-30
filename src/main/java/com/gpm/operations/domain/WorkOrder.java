@@ -141,6 +141,12 @@ public class WorkOrder implements Serializable {
     @Column(name = "site_id")
     private Long siteId;
 
+    @Column(name = "sous_projet")
+    private String sousProjet;
+
+    @Column(name = "bon_commande_id")
+    private Long bonCommandeId;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -572,6 +578,32 @@ public class WorkOrder implements Serializable {
         this.siteId = siteId;
     }
 
+    public String getSousProjet() {
+        return this.sousProjet;
+    }
+
+    public WorkOrder sousProjet(String sousProjet) {
+        this.setSousProjet(sousProjet);
+        return this;
+    }
+
+    public void setSousProjet(String sousProjet) {
+        this.sousProjet = sousProjet;
+    }
+
+    public Long getBonCommandeId() {
+        return this.bonCommandeId;
+    }
+
+    public WorkOrder bonCommandeId(Long bonCommandeId) {
+        this.setBonCommandeId(bonCommandeId);
+        return this;
+    }
+
+    public void setBonCommandeId(Long bonCommandeId) {
+        this.bonCommandeId = bonCommandeId;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -628,6 +660,8 @@ public class WorkOrder implements Serializable {
             ", coordinateur=" + getCoordinateur() +
             ", identifiantUnique='" + getIdentifiantUnique() + "'" +
             ", siteId=" + getSiteId() +
+            ", sousProjet='" + getSousProjet() + "'" +
+            ", bonCommandeId=" + getBonCommandeId() +
             "}";
     }
 }
