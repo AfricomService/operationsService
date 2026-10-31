@@ -145,6 +145,18 @@
     {
       "fieldName": "siteId",
       "fieldType": "Long"
+    },
+    {
+      "fieldName": "sousProjet",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "bonCommandeId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "nombreDeplacements",
+      "fieldType": "Integer"
     }
   ],
   "fluentMethods": true,
