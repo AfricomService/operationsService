@@ -1,0 +1,23 @@
+{
+  "microserviceName": "operationsService",
+  "clientRootFolder": "operationsService",
+  "databaseType": "sql",
+  "fields": [
+    {
+      "fieldName": "nom",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceClass",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": false,
+  "readOnly": false,
+  "pagination": "no",
+  "name": "ParametreWO",
+  "changelogDate": "20261030134636"
+}
