@@ -153,6 +153,10 @@
     {
       "fieldName": "bonCommandeId",
       "fieldType": "Long"
+    },
+    {
+      "fieldName": "nombreDeplacements",
+      "fieldType": "Integer"
     }
   ],
   "fluentMethods": true,

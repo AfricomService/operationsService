@@ -107,6 +107,8 @@ public class WorkOrderDTO implements Serializable {
 
     private Long bonCommandeId;
 
+    private Integer nombreDeplacements;
+
     public Long getId() {
         return id;
     }
@@ -387,6 +389,14 @@ public class WorkOrderDTO implements Serializable {
         this.bonCommandeId = bonCommandeId;
     }
 
+    public Integer getNombreDeplacements() {
+        return nombreDeplacements;
+    }
+
+    public void setNombreDeplacements(Integer nombreDeplacements) {
+        this.nombreDeplacements = nombreDeplacements;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -447,6 +457,7 @@ public class WorkOrderDTO implements Serializable {
             ", siteId=" + getSiteId() +
             ", sousProjet='" + getSousProjet() + "'" +
             ", bonCommandeId=" + getBonCommandeId() +
+            ", nombreDeplacements=" + getNombreDeplacements() +
             "}";
     }
 }
