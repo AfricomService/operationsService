@@ -1,0 +1,43 @@
+{
+  "changelogDate": "20261112121403",
+  "clientRootFolder": "operationsService",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "woId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "articleId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "dateRealisation",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "qteCommande",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "qteEffectuee",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "prixArticle",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "prixArticleHT",
+      "fieldType": "BigDecimal"
+    }
+  ],
+  "jpaMetamodelFiltering": false,
+  "microserviceName": "operationsService",
+  "name": "WoArticles",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceClass"
+}
