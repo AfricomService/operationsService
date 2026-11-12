@@ -27,6 +27,7 @@
     <include file="config/liquibase/changelog/20260917131432_added_entity_WorkOrderRessource.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20261030134241_added_entity_ParametrageDeplacement.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20261030134636_added_entity_ParametreWO.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20261112121403_added_entity_WoArticles.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20260312131540_added_entity_constraints_ArticleMission.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260312131640_added_entity_constraints_HistoriqueStatutWO.xml" relativeToChangelogFile="false"/>
