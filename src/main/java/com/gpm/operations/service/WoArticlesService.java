@@ -2,11 +2,13 @@ package com.gpm.operations.service;
 
 import com.gpm.operations.domain.WoArticles;
 import com.gpm.operations.repository.WoArticlesRepository;
+import com.gpm.operations.security.AuthoritiesConstants;
+import com.gpm.operations.security.SecurityUtils;
 import com.gpm.operations.service.dto.WoArticlesDTO;
 import com.gpm.operations.service.mapper.WoArticlesMapper;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import com.gpm.operations.web.rest.errors.BadRequestAlertException;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,5 +110,66 @@ public class WoArticlesService {
     public void delete(Long id) {
         log.debug("Request to delete WoArticles : {}", id);
         woArticlesRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<WoArticlesDTO> findByWoId(Long woId) {
+        List<WoArticlesDTO> result = woArticlesRepository
+            .findAllByWoId(woId)
+            .stream()
+            .map(woArticlesMapper::toDto)
+            .collect(Collectors.toList());
+
+        maskPriceIfNotAllowed(result);
+        return result;
+    }
+
+    private void maskPriceIfNotAllowed(List<WoArticlesDTO> dtos) {
+        if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.CAN_SEE_PRICE)) {
+            dtos.forEach(dto -> {
+                dto.setPrixArticle(null);
+                dto.setPrixArticleHT(null); // see question 5 below
+            });
+        }
+    }
+
+    public List<WoArticlesDTO> replaceForWo(Long woId, List<WoArticlesDTO> dtos) {
+        Map<Long, WoArticles> existingByArticle = woArticlesRepository
+            .findAllByWoId(woId)
+            .stream()
+            .collect(Collectors.toMap(WoArticles::getArticleId, Function.identity(), (a, b) -> a));
+
+        Set<Long> incomingArticleIds = new HashSet<>();
+        List<WoArticles> toSave = new ArrayList<>();
+
+        for (WoArticlesDTO dto : dtos) {
+            if (dto.getArticleId() == null || !incomingArticleIds.add(dto.getArticleId())) {
+                throw new BadRequestAlertException("Article manquant ou en double", "operationsServiceWoArticles", "invalidarticle");
+            }
+            if (dto.getQteCommande() == null || dto.getQteCommande() < 1) {
+                throw new BadRequestAlertException("Quantité invalide", "operationsServiceWoArticles", "invalidqte");
+            }
+
+            WoArticles entity = existingByArticle.get(dto.getArticleId());
+            if (entity != null) {
+                // Déjà lié : on ne change que la quantité commandée (prix figés, qteEffectuee, dateRealisation conservés)
+                entity.setQteCommande(dto.getQteCommande());
+            } else {
+                entity = woArticlesMapper.toEntity(dto);
+                entity.setId(null);
+                entity.setWoId(woId);
+                entity.setQteEffectuee(0);
+                entity.setDateRealisation(null);
+            }
+            toSave.add(entity);
+        }
+
+        existingByArticle
+            .values()
+            .stream()
+            .filter(e -> !incomingArticleIds.contains(e.getArticleId()))
+            .forEach(woArticlesRepository::delete);
+
+        return woArticlesRepository.saveAll(toSave).stream().map(woArticlesMapper::toDto).collect(Collectors.toList());
     }
 }

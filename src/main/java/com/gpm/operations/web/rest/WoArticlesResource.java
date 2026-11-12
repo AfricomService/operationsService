@@ -169,4 +169,18 @@ public class WoArticlesResource {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
+
+    @GetMapping("/wo-articles/by-wo/{woId}")
+    public List<WoArticlesDTO> getWoArticlesByWo(@PathVariable Long woId) {
+        return woArticlesService.findByWoId(woId);
+    }
+
+    @PutMapping("/wo-articles/wo/{woId}")
+    public ResponseEntity<List<WoArticlesDTO>> replaceWoArticles(@PathVariable Long woId, @RequestBody List<WoArticlesDTO> dtos) {
+        List<WoArticlesDTO> result = woArticlesService.replaceForWo(woId, dtos);
+        return ResponseEntity
+            .ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, woId.toString()))
+            .body(result);
+    }
 }
