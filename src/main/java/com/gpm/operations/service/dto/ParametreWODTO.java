@@ -1,6 +1,7 @@
 package com.gpm.operations.service.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
@@ -13,6 +14,10 @@ public class ParametreWODTO implements Serializable {
     private String nom;
 
     private String description;
+
+    private BigDecimal montantTechnicien;
+
+    private BigDecimal montantChefTechnicien;
 
     public Long getId() {
         return id;
@@ -36,6 +41,22 @@ public class ParametreWODTO implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public BigDecimal getMontantTechnicien() {
+        return montantTechnicien;
+    }
+
+    public void setMontantTechnicien(BigDecimal montantTechnicien) {
+        this.montantTechnicien = montantTechnicien;
+    }
+
+    public BigDecimal getMontantChefTechnicien() {
+        return montantChefTechnicien;
+    }
+
+    public void setMontantChefTechnicien(BigDecimal montantChefTechnicien) {
+        this.montantChefTechnicien = montantChefTechnicien;
     }
 
     @Override
@@ -66,6 +87,8 @@ public class ParametreWODTO implements Serializable {
             "id=" + getId() +
             ", nom='" + getNom() + "'" +
             ", description='" + getDescription() + "'" +
+            ", montantTechnicien=" + getMontantTechnicien() +
+            ", montantChefTechnicien=" + getMontantChefTechnicien() +
             "}";
     }
 }
