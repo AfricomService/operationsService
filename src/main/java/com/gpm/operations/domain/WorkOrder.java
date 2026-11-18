@@ -150,6 +150,15 @@ public class WorkOrder implements Serializable {
     @Column(name = "nombre_deplacements")
     private Integer nombreDeplacements;
 
+    @Column(name = "valideur")
+    private Long valideur;
+
+    @Column(name = "type_mission")
+    private String typeMission;
+
+    @Column(name = "societe_executrice")
+    private Long societeExecutrice;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -620,6 +629,45 @@ public class WorkOrder implements Serializable {
         this.nombreDeplacements = nombreDeplacements;
     }
 
+    public Long getValideur() {
+        return this.valideur;
+    }
+
+    public WorkOrder valideur(Long valideur) {
+        this.setValideur(valideur);
+        return this;
+    }
+
+    public void setValideur(Long valideur) {
+        this.valideur = valideur;
+    }
+
+    public String getTypeMission() {
+        return this.typeMission;
+    }
+
+    public WorkOrder typeMission(String typeMission) {
+        this.setTypeMission(typeMission);
+        return this;
+    }
+
+    public void setTypeMission(String typeMission) {
+        this.typeMission = typeMission;
+    }
+
+    public Long getSocieteExecutrice() {
+        return this.societeExecutrice;
+    }
+
+    public WorkOrder societeExecutrice(Long societeExecutrice) {
+        this.setSocieteExecutrice(societeExecutrice);
+        return this;
+    }
+
+    public void setSocieteExecutrice(Long societeExecutrice) {
+        this.societeExecutrice = societeExecutrice;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -679,6 +727,9 @@ public class WorkOrder implements Serializable {
             ", sousProjet='" + getSousProjet() + "'" +
             ", bonCommandeId=" + getBonCommandeId() +
             ", nombreDeplacements=" + getNombreDeplacements() +
+            ", valideur=" + getValideur() +
+            ", typeMission='" + getTypeMission() + "'" +
+            ", societeExecutrice=" + getSocieteExecutrice() +
             "}";
     }
 }
