@@ -34,7 +34,8 @@
       "WorkOrderRessource",
       "ParametrageDeplacement",
       "ParametreWO",
-      "WoArticles"
+      "WoArticles",
+      "AclEntry"
     ],
     "entitySuffix": "",
     "gatewayServerPort": "8080",
@@ -43,7 +44,7 @@
     "jhipsterVersion": "7.9.3",
     "jwtSecretKey": "Y2Y2OTQzYTg1YzRlZDkyOGQ1MDIxZGE4ZDQ4MjUxMTAzMmJjYjNhNzI0ZTYxNzIxMGE0ZWFlZjU5YjQxMDA5N2MyYmYwNGNjNGQ4ZjBiZmZjZDJjMWZjMzFmM2Q0NWE4NzdiYmVjNmE3MDc4ZmQ0OTc3NjY5MWNjOTAxMzRhOGI=",
     "languages": ["en"],
-    "lastLiquibaseTimestamp": 1794485643000,
+    "lastLiquibaseTimestamp": 1795091012000,
     "messageBroker": false,
     "microfrontend": false,
     "nativeLanguage": "en",
