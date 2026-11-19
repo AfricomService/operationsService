@@ -13,5 +13,7 @@ public final class AuthoritiesConstants {
 
     public static final String CAN_SEE_PRICE = "CAN_SEE_PRICE";
 
+    public static final String CAN_ACTIVATE_WO = "ROLE_CAN_ACTIVATE_WO";
+
     private AuthoritiesConstants() {}
 }
