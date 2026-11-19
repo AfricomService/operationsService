@@ -12,11 +12,12 @@ import org.springframework.statemachine.config.StateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.builders.StateMachineConfigurationConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineStateConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineTransitionConfigurer;
-import org.springframework.statemachine.guard.Guard;
 
 @Configuration
 @EnableStateMachineFactory
 public class WorkOrderStateMachineConfig extends StateMachineConfigurerAdapter<StatutWO, WorkOrderEvent> {
+
+
 
     @Override
     public void configure(StateMachineStateConfigurer<StatutWO, WorkOrderEvent> states) throws Exception {
@@ -30,7 +31,6 @@ public class WorkOrderStateMachineConfig extends StateMachineConfigurerAdapter<S
             .source(StatutWO.Creation)
             .target(StatutWO.ExecutionTravaux)
             .event(WorkOrderEvent.START_EXECUTION)
-            .guard(checkVehicleAssignedAndSetTime())
             .action(setDateHeureDebutReel())
             .and()
             .withExternal()
@@ -59,12 +59,6 @@ public class WorkOrderStateMachineConfig extends StateMachineConfigurerAdapter<S
         config.withConfiguration().autoStartup(false);
     }
 
-    private Guard<StatutWO, WorkOrderEvent> checkVehicleAssignedAndSetTime() {
-        return context -> {
-            WorkOrder wo = context.getMessageHeaders().get("WORK_ORDER", WorkOrder.class);
-            return wo != null && wo.getVehiculeId() != null;
-        };
-    }
 
     private Action<StatutWO, WorkOrderEvent> setDateHeureDebutReel() {
         return context -> {
