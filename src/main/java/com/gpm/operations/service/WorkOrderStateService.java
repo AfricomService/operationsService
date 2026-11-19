@@ -1,14 +1,19 @@
 package com.gpm.operations.service;
 
 import com.gpm.operations.domain.Mission;
+import com.gpm.operations.domain.ParametrageDeplacement;
+import com.gpm.operations.domain.ParametreWO;
 import com.gpm.operations.domain.WorkOrder;
 import com.gpm.operations.domain.enumeration.StatutWO;
 import com.gpm.operations.domain.enumeration.WorkOrderEvent;
 import com.gpm.operations.repository.MissionRepository;
+import com.gpm.operations.repository.ParametrageDeplacementRepository;
+import com.gpm.operations.repository.ParametreWORepository;
 import com.gpm.operations.repository.WorkOrderRepository;
 import com.gpm.operations.repository.WorkOrderTechniciensRepository;
 import com.gpm.operations.security.SecurityUtils;
 import com.gpm.operations.service.dto.MissionLineDTO;
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,17 +38,23 @@ public class WorkOrderStateService {
     private final WorkOrderRepository workOrderRepository;
     private final WorkOrderTechniciensRepository workOrderTechniciensRepository;
     private final MissionRepository missionRepository;
+    private final ParametrageDeplacementRepository parametrageDeplacementRepository;
+    private final ParametreWORepository parametreWORepository;
     private final StateMachineFactory<StatutWO, WorkOrderEvent> stateMachineFactory;
 
     public WorkOrderStateService(
         WorkOrderRepository workOrderRepository,
         WorkOrderTechniciensRepository workOrderTechniciensRepository,
         MissionRepository missionRepository,
+        ParametrageDeplacementRepository parametrageDeplacementRepository,
+        ParametreWORepository parametreWORepository,
         StateMachineFactory<StatutWO, WorkOrderEvent> stateMachineFactory
     ) {
         this.workOrderRepository = workOrderRepository;
         this.workOrderTechniciensRepository = workOrderTechniciensRepository;
         this.missionRepository = missionRepository;
+        this.parametrageDeplacementRepository = parametrageDeplacementRepository;
+        this.parametreWORepository = parametreWORepository;
         this.stateMachineFactory = stateMachineFactory;
     }
 
@@ -94,15 +105,66 @@ public class WorkOrderStateService {
             );
         }
 
+        // Options cochées par jour (enregistrées en base) et montants par paramètre, chargés une seule fois
+        List<ParametrageDeplacement> jours = parametrageDeplacementRepository.findByWorkOrderIdOrderByDateAsc(workOrder.getId());
+        Map<String, ParametreWO> parametresParNom = parametreWORepository
+            .findAll()
+            .stream()
+            .filter(p -> p.getNom() != null)
+            .collect(Collectors.toMap(ParametreWO::getNom, p -> p, (a, b) -> a));
+
         for (MissionLineDTO line : lines) {
+            String titre = expected.get(line.getContactSocieteId());
+
             Mission mission = new Mission();
-            mission.setTitreBeneficiaire(expected.get(line.getContactSocieteId()));
+            mission.setTitreBeneficiaire(titre);
+            mission.setFraisPersonnel(calculerFraisPersonnel(jours, parametresParNom, TITRE_MANAGER.equals(titre)));
+            mission.setMontantTotale(calculerMontantTotale(mission));
             mission.setNoteMission(line.getNoteMission());
             mission.setContactSocieteId(line.getContactSocieteId());
             mission.setContactSocieteMatricule(line.getContactSocieteMatricule());
             mission.setWorkorderId(workOrder.getId());
             missionRepository.save(mission);
         }
+    }
+
+    /**
+     * Somme, pour chaque jour et chaque option cochée, du montant du paramètre :
+     * montantChefTechnicien pour un MANAGER, montantTechnicien pour un TECHNIQUE.
+     */
+    private BigDecimal calculerFraisPersonnel(List<ParametrageDeplacement> jours, Map<String, ParametreWO> parametresParNom, boolean manager) {
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (ParametrageDeplacement jour : jours) {
+            if (jour.getParams() == null) {
+                continue;
+            }
+            for (Map.Entry<String, Object> option : jour.getParams().entrySet()) {
+                if (!Boolean.parseBoolean(String.valueOf(option.getValue()))) {
+                    continue; // option non cochée ce jour-là
+                }
+                ParametreWO parametre = parametresParNom.get(option.getKey());
+                if (parametre == null) {
+                    continue;
+                }
+                BigDecimal montant = manager ? parametre.getMontantChefTechnicien() : parametre.getMontantTechnicien();
+                if (montant != null) {
+                    total = total.add(montant);
+                }
+            }
+        }
+        return total;
+    }
+
+    /** montantTotale = fraisJourFerie + fraisJourWeekend + fraisPersonnel (une valeur null compte pour 0). */
+    private BigDecimal calculerMontantTotale(Mission mission) {
+        return nullToZero(mission.getFraisJourFerie())
+            .add(nullToZero(mission.getFraisJourWeekend()))
+            .add(nullToZero(mission.getFraisPersonnel()));
+    }
+
+    private BigDecimal nullToZero(BigDecimal valeur) {
+        return valeur != null ? valeur : BigDecimal.ZERO;
     }
 
     public StatutWO changeStatus(Long workOrderId, WorkOrderEvent event) {
