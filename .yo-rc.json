@@ -35,7 +35,8 @@
       "ParametrageDeplacement",
       "ParametreWO",
       "WoArticles",
-      "Mission"
+      "Mission",
+      "NoteFrais"
     ],
     "entitySuffix": "",
     "gatewayServerPort": "8080",
@@ -44,7 +45,7 @@
     "jhipsterVersion": "7.9.3",
     "jwtSecretKey": "Y2Y2OTQzYTg1YzRlZDkyOGQ1MDIxZGE4ZDQ4MjUxMTAzMmJjYjNhNzI0ZTYxNzIxMGE0ZWFlZjU5YjQxMDA5N2MyYmYwNGNjNGQ4ZjBiZmZjZDJjMWZjMzFmM2Q0NWE4NzdiYmVjNmE3MDc4ZmQ0OTc3NjY5MWNjOTAxMzRhOGI=",
     "languages": ["en"],
-    "lastLiquibaseTimestamp": 1795013813000,
+    "lastLiquibaseTimestamp": 1795100506000,
     "messageBroker": false,
     "microfrontend": false,
     "nativeLanguage": "en",
