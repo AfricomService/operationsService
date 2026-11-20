@@ -2,9 +2,11 @@ package com.gpm.operations.web.rest;
 
 import com.gpm.operations.repository.NoteFraisRepository;
 import com.gpm.operations.service.NoteFraisService;
+import com.gpm.operations.service.dto.NoteFraisCreationDTO;
 import com.gpm.operations.service.dto.NoteFraisDTO;
 import com.gpm.operations.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
+import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -64,6 +67,28 @@ public class NoteFraisResource {
             .created(new URI("/api/note-frais/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
+    }
+
+    /**
+     * {@code POST  /note-frais/from-missions} : crée une note de frais à partir de missions sélectionnées.
+     */
+    @PostMapping("/note-frais/from-missions")
+    public ResponseEntity<NoteFraisDTO> createNoteFraisFromMissions(@RequestBody NoteFraisCreationDTO request)
+        throws URISyntaxException {
+        log.debug("REST request to create NoteFrais from missions : {}", request.getMissionIds());
+        NoteFraisDTO result = noteFraisService.createFromMissions(request);
+        return ResponseEntity
+            .created(new URI("/api/note-frais/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+
+    /**
+     * {@code GET  /note-frais/montant-en-lettres} : montant converti en lettres (affichage à la création).
+     */
+    @GetMapping(value = "/note-frais/montant-en-lettres", produces = MediaType.TEXT_PLAIN_VALUE)
+    public String getMontantEnLettres(@RequestParam("montant") BigDecimal montant) {
+        return noteFraisService.montantEnLettres(montant);
     }
 
     /**

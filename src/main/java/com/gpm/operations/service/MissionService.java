@@ -3,8 +3,14 @@ package com.gpm.operations.service;
 import com.gpm.operations.domain.Mission;
 import com.gpm.operations.repository.MissionRepository;
 import com.gpm.operations.service.dto.MissionDTO;
+import com.gpm.operations.service.dto.MissionLigneDTO;
 import com.gpm.operations.service.mapper.MissionMapper;
+
+import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -95,5 +101,11 @@ public class MissionService {
     public void delete(Long id) {
         log.debug("Request to delete Mission : {}", id);
         missionRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MissionLigneDTO> findByPeriodeWorkOrder(ZonedDateTime debut, ZonedDateTime fin, Long contactSocieteId) {
+        log.debug("Request to get Missions between {} and {}", debut, fin);
+        return missionRepository.findByPeriodeWorkOrder(debut, fin, contactSocieteId);
     }
 }

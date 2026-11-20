@@ -5,9 +5,11 @@ import com.gpm.operations.service.MissionQueryService;
 import com.gpm.operations.service.MissionService;
 import com.gpm.operations.service.criteria.MissionCriteria;
 import com.gpm.operations.service.dto.MissionDTO;
+import com.gpm.operations.service.dto.MissionLigneDTO;
 import com.gpm.operations.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -16,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -154,6 +157,19 @@ public class MissionResource {
         Page<MissionDTO> page = missionQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /missions/search} : missions dont le work order a dateHeureDebutReel dans [debut, fin].
+     */
+    @GetMapping("/missions/search")
+    public List<MissionLigneDTO> searchMissionsByPeriode(
+        @RequestParam("debut") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime debut,
+        @RequestParam("fin") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime fin,
+        @RequestParam(value = "contactSocieteId", required = false) Long contactSocieteId
+    ) {
+        log.debug("REST request to search Missions between {} and {}", debut, fin);
+        return missionService.findByPeriodeWorkOrder(debut, fin, contactSocieteId);
     }
 
     /**
