@@ -44,5 +44,26 @@ public interface WorkOrderRepository extends JpaRepository<WorkOrder, Long> {
     )
     Page<WorkOrder> findAllAccessible(@Param("sidIds") List<Long> sidIds, Pageable pageable);
 
+    @Query(
+        "select w from WorkOrder w " +
+            "where (:statut is null or w.statut = :statut) " +
+            "and (:clientId is null or w.clientId = :clientId) " +
+            "and (:search = '' " +
+            "     or lower(w.identifiantUnique) like lower(concat('%', :search, '%')) " +
+            "     or w.affaireId in (:affaireIds)) " +
+            "and w.id in (" +
+            "  select e.objectId from AclEntry e where e.objectType = 'WORKORDER'" +
+            "  and e.sidId in :sidIds and (e.canRead = true or e.canWrite = true)" +
+            ")"
+    )
+    Page<WorkOrder> findAllWithFiltersAccessible(
+        @Param("statut") StatutWO statut,
+        @Param("clientId") Long clientId,
+        @Param("search") String search,
+        @Param("affaireIds") List<Long> affaireIds,
+        @Param("sidIds") List<Long> sidIds,
+        Pageable pageable
+    );
+
 
 }
