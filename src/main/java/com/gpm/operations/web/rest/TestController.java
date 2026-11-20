@@ -3,12 +3,15 @@ package com.gpm.operations.web.rest;
 import com.gpm.operations.service.GatewayApiClient;
 import com.gpm.operations.service.ReportApiClient;
 import com.gpm.operations.service.dto.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/test")
+@RequestMapping("/api/test")
 public class TestController {
 
     private final ReportApiClient reports;
@@ -20,23 +23,45 @@ public class TestController {
     }
 
     @GetMapping("/templates")
-    public List<RemoteRapportTemplateDTO> templates() {
-        return reports.getTemplates(0, 20, false).getContent();
+    public List<RemoteRapportTemplateDTO> templates(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "200") int size
+    ) {
+        return reports.getTemplates(page, size, false).getContent().stream()
+            .filter(t -> !Boolean.FALSE.equals(t.getActif()))   // hide inactive templates
+            .collect(Collectors.toList());
     }
 
     @GetMapping("/users")
-    public List<RemoteUserDTO> users() {
-        return gateway.getUsers(0, 20);
+    public List<RemoteUserDTO> users(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "200") int size
+    ) {
+        return gateway.getUsers(page, size).stream()
+            .filter(RemoteUserDTO::isActivated)
+            .collect(Collectors.toList());
     }
 
     @PostMapping("/rapport-request")
-    public RemoteRapportRequestDTO createRequest() {
+    public RemoteRapportRequestDTO createRequest(
+        @RequestParam String reference,
+        @RequestParam String clientFinal,
+        @RequestParam Long technicianId,
+        @RequestParam Long rapportTemplateId,
+        @RequestParam List<Long> lineTypeIds,
+        @RequestParam List<Long> filesDefIds
+    ) {
+        // the remote side enforces @Size(max = 64) on both
+        if (reference.length() > 64 || clientFinal.length() > 64) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "reference and clientFinal must be at most 64 characters");
+        }
+
         RemoteRapportRequestDTO dto = new RemoteRapportRequestDTO();
-        dto.setReference("TEST-001");
-        dto.setClientfinal("CLIENT TEST");
-        dto.setTechnicianId(6057L);          // real remote user id
-        dto.setRapportTemplateId(1001L);       // real template id
-        return reports.createCustom(dto, List.of(1672L, 1658L), List.of(953001L));
+        dto.setReference(reference);
+        dto.setClientfinal(clientFinal);
+        dto.setTechnicianId(technicianId);
+        dto.setRapportTemplateId(rapportTemplateId);
+        return reports.createCustom(dto, lineTypeIds, filesDefIds);
     }
 
     @GetMapping("/line-types")

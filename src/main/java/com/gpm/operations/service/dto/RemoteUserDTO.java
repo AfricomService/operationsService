@@ -16,6 +16,9 @@ public class RemoteUserDTO {
     private boolean activated;
     private Set<String> authorities;
 
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
     public String getLogin() {
         return login;
     }
