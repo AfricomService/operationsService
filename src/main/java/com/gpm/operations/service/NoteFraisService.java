@@ -89,6 +89,7 @@ public class NoteFraisService {
         noteFrais.setContactSocieteId(contactSocieteId);
         noteFrais.setMontantTotale(total);
         noteFrais.setMontantTotaleEnLettre(montantEnLettres(total));
+        noteFrais.setIdentifiantUnique(request.getIdentifiantUnique());
         noteFrais = noteFraisRepository.save(noteFrais);
 
         for (Mission mission : missions) {

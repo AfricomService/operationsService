@@ -38,6 +38,9 @@ public class NoteFrais implements Serializable {
     @Column(name = "montant_totale_en_lettre")
     private String montantTotaleEnLettre;
 
+    @Column(name = "identifiant_unique")
+    private String identifiantUnique;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -118,6 +121,19 @@ public class NoteFrais implements Serializable {
         this.montantTotaleEnLettre = montantTotaleEnLettre;
     }
 
+    public String getIdentifiantUnique() {
+        return this.identifiantUnique;
+    }
+
+    public NoteFrais identifiantUnique(String identifiantUnique) {
+        this.setIdentifiantUnique(identifiantUnique);
+        return this;
+    }
+
+    public void setIdentifiantUnique(String identifiantUnique) {
+        this.identifiantUnique = identifiantUnique;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -147,6 +163,7 @@ public class NoteFrais implements Serializable {
             ", contactSocieteId=" + getContactSocieteId() +
             ", montantTotale=" + getMontantTotale() +
             ", montantTotaleEnLettre='" + getMontantTotaleEnLettre() + "'" +
+            ", identifiantUnique='" + getIdentifiantUnique() + "'" +
             "}";
     }
 }

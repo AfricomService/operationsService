@@ -22,6 +22,8 @@ public class NoteFraisDTO implements Serializable {
 
     private String montantTotaleEnLettre;
 
+    private String identifiantUnique;
+
     public Long getId() {
         return id;
     }
@@ -70,6 +72,14 @@ public class NoteFraisDTO implements Serializable {
         this.montantTotaleEnLettre = montantTotaleEnLettre;
     }
 
+    public String getIdentifiantUnique() {
+        return identifiantUnique;
+    }
+
+    public void setIdentifiantUnique(String identifiantUnique) {
+        this.identifiantUnique = identifiantUnique;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -101,6 +111,7 @@ public class NoteFraisDTO implements Serializable {
             ", contactSocieteId=" + getContactSocieteId() +
             ", montantTotale=" + getMontantTotale() +
             ", montantTotaleEnLettre='" + getMontantTotaleEnLettre() + "'" +
+            ", identifiantUnique='" + getIdentifiantUnique() + "'" +
             "}";
     }
 }

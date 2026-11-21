@@ -10,6 +10,7 @@ public class NoteFraisCreationDTO implements Serializable {
     private ZonedDateTime dateFin;
     private Long contactSocieteId;
     private List<Long> missionIds;
+    private String identifiantUnique;
 
     public ZonedDateTime getDateDebut() { return dateDebut; }
     public void setDateDebut(ZonedDateTime dateDebut) { this.dateDebut = dateDebut; }
@@ -19,4 +20,11 @@ public class NoteFraisCreationDTO implements Serializable {
     public void setContactSocieteId(Long contactSocieteId) { this.contactSocieteId = contactSocieteId; }
     public List<Long> getMissionIds() { return missionIds; }
     public void setMissionIds(List<Long> missionIds) { this.missionIds = missionIds; }
+    public String getIdentifiantUnique() {
+        return identifiantUnique;
+    }
+
+    public void setIdentifiantUnique(String identifiantUnique) {
+        this.identifiantUnique = identifiantUnique;
+    }
 }

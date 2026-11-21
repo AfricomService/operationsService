@@ -22,6 +22,10 @@
     {
       "fieldName": "montantTotaleEnLettre",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "identifiantUnique",
+      "fieldType": "String"
     }
   ],
   "relationships": [],
