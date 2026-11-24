@@ -136,5 +136,16 @@ public class ReportApiClient {
             value
         );
     }
+
+    /** GET /rapport-requests/by-alternative-reference?uniqueId=WO-6093-26 */
+    public List<RemoteRapportRequestSummaryDTO> findByAlternativeReference(String uniqueId) {
+        return rt.exchange(
+            "/rapport-requests/by-alternative-reference?uniqueId={id}",
+            HttpMethod.GET,
+            null,
+            new ParameterizedTypeReference<List<RemoteRapportRequestSummaryDTO>>() {},
+            uniqueId
+        ).getBody();
+    }
 }
 

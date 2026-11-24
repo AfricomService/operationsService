@@ -80,7 +80,7 @@ public class TestController {
         String woReference = stripExePrefix(reference);
         try {
             RemoteRapportRequestDTO updated =
-                reports.addAlternativeReportLineData(created.getId(), "REFERENCE WO", woReference);
+                reports.addAlternativeReportLineData(created.getId(), "Reference", woReference);
             return updated != null ? updated : created;
         } catch (RestClientException e) {
             // the ticket already exists remotely: don't fail the whole call, just log it
@@ -91,13 +91,8 @@ public class TestController {
 
     /** "EXE-WO-0020-26" (or "EXEWO-0020-26") -> "WO-0020-26" */
     private static String stripExePrefix(String reference) {
-        if (reference.startsWith("EXE-")) {
-            return reference.substring(4);
-        }
-        if (reference.startsWith("EXE")) {
-            return reference.substring(3);
-        }
-        return reference;
+        int idx = reference.indexOf("WO-");
+        return idx >= 0 ? reference.substring(idx) : reference;
     }
 
     @GetMapping("/line-types")
@@ -115,5 +110,11 @@ public class TestController {
                                                @RequestParam String key,
                                                @RequestParam String value) {
         return reports.addAlternativeReportLineData(requestId, key, value);
+    }
+
+    @GetMapping("/rapport-requests")
+    public List<RemoteRapportRequestSummaryDTO> rapportRequests(@RequestParam String uniqueId) {
+        List<RemoteRapportRequestSummaryDTO> result = reports.findByAlternativeReference(uniqueId);
+        return result != null ? result : List.of();
     }
 }
