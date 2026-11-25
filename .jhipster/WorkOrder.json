@@ -157,6 +157,18 @@
     {
       "fieldName": "nombreDeplacements",
       "fieldType": "Integer"
+    },
+    {
+      "fieldName": "valideur",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "typeMission",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "societeExecutrice",
+      "fieldType": "Long"
     }
   ],
   "fluentMethods": true,

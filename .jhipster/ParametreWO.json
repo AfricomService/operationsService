@@ -10,6 +10,14 @@
     {
       "fieldName": "description",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "montantTechnicien",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "montantChefTechnicien",
+      "fieldType": "BigDecimal"
     }
   ],
   "relationships": [],

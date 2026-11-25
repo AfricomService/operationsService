@@ -20,7 +20,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import com.gpm.operations.service.dto.MissionLineDTO;
+import com.gpm.operations.service.dto.StartExecutionDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -207,6 +208,14 @@ public class WorkOrderResource {
     @PostMapping("/work-orders/{id}/transition/{event}")
     public ResponseEntity<StatutWO> triggerTransition(@PathVariable Long id, @PathVariable WorkOrderEvent event) {
         log.debug("REST request to trigger transition {} on WorkOrder : {}", event, id);
+        // Le démarrage de l'exécution passe obligatoirement par /start-execution (création des missions)
+        if (event == WorkOrderEvent.START_EXECUTION) {
+            throw new BadRequestAlertException(
+                "Utilisez /work-orders/{id}/start-execution pour démarrer l'exécution.",
+                ENTITY_NAME,
+                "usestartexecution"
+            );
+        }
         try {
             StatutWO newStatus = workOrderStateService.changeStatus(id, event);
             return ResponseEntity
@@ -215,6 +224,40 @@ public class WorkOrderResource {
                 .body(newStatus);
         } catch (IllegalArgumentException | IllegalStateException e) {
             throw new BadRequestAlertException(e.getMessage(), ENTITY_NAME, "invalidtransition");
+        }
+    }
+
+
+    /**
+     * {@code POST  /work-orders/:id/start-execution} : crée les missions (responsable + techniciens) puis passe le work order
+     * du statut Création au statut ExecutionTravaux, dans une seule transaction.
+     */
+    @PostMapping("/work-orders/{id}/start-execution")
+    public ResponseEntity<StatutWO> startExecution(@PathVariable Long id, @Valid @RequestBody StartExecutionDTO request) {
+        log.debug("REST request to start execution of WorkOrder : {}, {}", id, request.getMissions());
+        try {
+            StatutWO newStatus = workOrderStateService.startExecution(id, request.getMissions());
+            return ResponseEntity
+                .ok()
+                .headers(HeaderUtil.createAlert(applicationName, "WorkOrder status changed to " + newStatus, id.toString()))
+                .body(newStatus);
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            throw new BadRequestAlertException(e.getMessage(), ENTITY_NAME, "invalidtransition");
+        }
+    }
+
+    /**
+     * {@code PUT  /work-orders/:id/sync-missions} : aligne les missions sur le responsable et les techniciens enregistrés
+     * (statut ExecutionTravaux uniquement).
+     */
+    @PutMapping("/work-orders/{id}/sync-missions")
+    public ResponseEntity<Void> syncMissions(@PathVariable Long id, @RequestBody List<MissionLineDTO> missions) {
+        log.debug("REST request to sync missions of WorkOrder : {}", id);
+        try {
+            workOrderStateService.syncMissions(id, missions);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            throw new BadRequestAlertException(e.getMessage(), ENTITY_NAME, "missionsync");
         }
     }
 }

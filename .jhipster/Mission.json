@@ -1,0 +1,55 @@
+{
+  "microserviceName": "operationsService",
+  "clientRootFolder": "operationsService",
+  "databaseType": "sql",
+  "fields": [
+    {
+      "fieldName": "titreBeneficiaire",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "noteMission",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "contactSocieteId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "contactSocieteMatricule",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "fraisJourFerie",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "fraisJourWeekend",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "fraisPersonnel",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "montantTotale",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "workorderId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "noteFraisId",
+      "fieldType": "Long"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceClass",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "Mission",
+  "changelogDate": "20261118145653"
+}

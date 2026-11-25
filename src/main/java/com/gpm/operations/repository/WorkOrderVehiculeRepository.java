@@ -17,4 +17,6 @@ public interface WorkOrderVehiculeRepository extends JpaRepository<WorkOrderVehi
     List<WorkOrderVehicule> findByVehiculeIdIn(List<Long> vehiculeIds);
 
     void deleteByWorkOrderId(Long workOrderId);
+
+    boolean existsByWorkOrderId(Long workOrderId);
 }
