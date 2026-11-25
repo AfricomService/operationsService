@@ -6,7 +6,7 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
 /**
- * Ligne de mission saisie dans la modale « Exécuter ».
+ * Ligne de mission créée lors de l'action « Exécuter » (noteMission optionnelle, null par défaut).
  * Le titre du bénéficiaire (MANAGER / TECHNIQUE) n'est volontairement PAS envoyé par le client : le backend le déduit.
  */
 public class MissionLineDTO implements Serializable {
@@ -16,7 +16,6 @@ public class MissionLineDTO implements Serializable {
 
     private String contactSocieteMatricule;
 
-    @NotNull
     @DecimalMin("0")
     private BigDecimal noteMission;
 

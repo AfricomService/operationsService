@@ -14,6 +14,8 @@ import com.gpm.operations.repository.WorkOrderTechniciensRepository;
 import com.gpm.operations.security.SecurityUtils;
 import com.gpm.operations.service.dto.MissionLineDTO;
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,6 +78,102 @@ public class WorkOrderStateService {
         createMissions(workOrder, lines == null ? List.of() : lines);
 
         return changeStatus(workOrderId, WorkOrderEvent.START_EXECUTION);
+    }
+
+    /**
+     * Aligne les missions sur les équipes ENREGISTRÉES (responsable + techniciens) au statut ExecutionTravaux :
+     * supprime celles des personnes retirées (refus si déjà rattachées à une note de frais),
+     * recalcule titre et frais des personnes dont le rôle a changé, crée celles des personnes ajoutées.
+     * Les lignes reçues ne servent qu'à retrouver les matricules.
+     */
+    public void syncMissions(Long workOrderId, List<MissionLineDTO> lines) {
+        checkAuthorization(WorkOrderEvent.START_EXECUTION);
+
+        WorkOrder workOrder = workOrderRepository
+            .findById(workOrderId)
+            .orElseThrow(() -> new IllegalArgumentException("WorkOrder not found: " + workOrderId));
+
+        if (workOrder.getStatut() != StatutWO.ExecutionTravaux) {
+            throw new IllegalStateException("Les missions ne peuvent être modifiées qu'au statut Exécution travaux.");
+        }
+
+        Map<Long, String> expected = beneficiairesAttendus(workOrder);
+
+        Map<Long, String> matricules = new HashMap<>();
+        if (lines != null) {
+            lines.forEach(l -> matricules.put(l.getContactSocieteId(), l.getContactSocieteMatricule()));
+        }
+
+        List<Mission> existing = missionRepository.findByWorkorderId(workOrderId);
+
+        List<Mission> aSupprimer = existing
+            .stream()
+            .filter(m -> m.getContactSocieteId() == null || !expected.containsKey(m.getContactSocieteId()))
+            .collect(Collectors.toList());
+
+        if (aSupprimer.stream().anyMatch(m -> m.getNoteFraisId() != null)) {
+            throw new IllegalStateException(
+                "Impossible de retirer un bénéficiaire dont la mission est déjà rattachée à une note de frais."
+            );
+        }
+
+        missionRepository.deleteAll(aSupprimer);
+
+        List<ParametrageDeplacement> jours = parametrageDeplacementRepository.findByWorkOrderIdOrderByDateAsc(workOrder.getId());
+        Map<String, ParametreWO> parametresParNom = parametreWORepository
+            .findAll()
+            .stream()
+            .filter(p -> p.getNom() != null)
+            .collect(Collectors.toMap(ParametreWO::getNom, p -> p, (a, b) -> a));
+
+        Set<Long> conserves = new HashSet<>();
+        for (Mission mission : existing) {
+            if (aSupprimer.contains(mission)) {
+                continue;
+            }
+            conserves.add(mission.getContactSocieteId());
+
+            String titre = expected.get(mission.getContactSocieteId());
+            // Rôle changé (technicien <-> responsable) : titre et frais recalculés, sauf si déjà dans une note de frais
+            if (!titre.equals(mission.getTitreBeneficiaire()) && mission.getNoteFraisId() == null) {
+                mission.setTitreBeneficiaire(titre);
+                mission.setFraisPersonnel(calculerFraisPersonnel(jours, parametresParNom, TITRE_MANAGER.equals(titre)));
+                mission.setMontantTotale(calculerMontantTotale(mission));
+                missionRepository.save(mission);
+            }
+        }
+
+        for (Map.Entry<Long, String> beneficiaire : expected.entrySet()) {
+            if (conserves.contains(beneficiaire.getKey())) {
+                continue;
+            }
+            String titre = beneficiaire.getValue();
+
+            Mission mission = new Mission();
+            mission.setTitreBeneficiaire(titre);
+            mission.setFraisPersonnel(calculerFraisPersonnel(jours, parametresParNom, TITRE_MANAGER.equals(titre)));
+            mission.setMontantTotale(calculerMontantTotale(mission));
+            mission.setContactSocieteId(beneficiaire.getKey());
+            mission.setContactSocieteMatricule(matricules.get(beneficiaire.getKey()));
+            mission.setWorkorderId(workOrder.getId());
+            missionRepository.save(mission);
+        }
+    }
+
+    /** Bénéficiaires d'après la base : id du contact -> titre. Le responsable est posé en premier (il garde MANAGER s'il est aussi technicien). */
+    private Map<Long, String> beneficiairesAttendus(WorkOrder workOrder) {
+        Map<Long, String> expected = new LinkedHashMap<>();
+        if (workOrder.getResponsableId() != null) {
+            expected.put(workOrder.getResponsableId(), TITRE_MANAGER);
+        }
+        workOrderTechniciensRepository
+            .findByWorkOrderId(workOrder.getId())
+            .forEach(t -> {
+                if (t.getContactSocieteId() != null) {
+                    expected.putIfAbsent(t.getContactSocieteId(), TITRE_TECHNIQUE);
+                }
+            });
+        return expected;
     }
 
     private void createMissions(WorkOrder workOrder, List<MissionLineDTO> lines) {

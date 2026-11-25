@@ -8,6 +8,7 @@ import com.gpm.operations.service.dto.MissionDTO;
 import com.gpm.operations.service.dto.MissionLigneDTO;
 import com.gpm.operations.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
+import javax.validation.Valid;
 import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -122,7 +123,7 @@ public class MissionResource {
     @PatchMapping(value = "/missions/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<MissionDTO> partialUpdateMission(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody MissionDTO missionDTO
+        @Valid @RequestBody MissionDTO missionDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update Mission partially : {}, {}", id, missionDTO);
         if (missionDTO.getId() == null) {

@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import com.gpm.operations.service.dto.MissionLineDTO;
 import com.gpm.operations.service.dto.StartExecutionDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -242,6 +243,21 @@ public class WorkOrderResource {
                 .body(newStatus);
         } catch (IllegalArgumentException | IllegalStateException e) {
             throw new BadRequestAlertException(e.getMessage(), ENTITY_NAME, "invalidtransition");
+        }
+    }
+
+    /**
+     * {@code PUT  /work-orders/:id/sync-missions} : aligne les missions sur le responsable et les techniciens enregistrés
+     * (statut ExecutionTravaux uniquement).
+     */
+    @PutMapping("/work-orders/{id}/sync-missions")
+    public ResponseEntity<Void> syncMissions(@PathVariable Long id, @RequestBody List<MissionLineDTO> missions) {
+        log.debug("REST request to sync missions of WorkOrder : {}", id);
+        try {
+            workOrderStateService.syncMissions(id, missions);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            throw new BadRequestAlertException(e.getMessage(), ENTITY_NAME, "missionsync");
         }
     }
 }

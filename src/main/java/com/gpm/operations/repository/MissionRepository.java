@@ -31,4 +31,6 @@ public interface MissionRepository extends JpaRepository<Mission, Long>, JpaSpec
         @Param("fin") ZonedDateTime fin,
         @Param("contactSocieteId") Long contactSocieteId
     );
+
+    List<Mission> findByWorkorderId(Long workorderId);
 }

@@ -3,6 +3,8 @@ package com.gpm.operations.service.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
 
 /**
  * A DTO for the {@link com.gpm.operations.domain.Mission} entity.
@@ -13,6 +15,8 @@ public class MissionDTO implements Serializable {
 
     private String titreBeneficiaire;
 
+    @DecimalMin("0")
+    @DecimalMax("20")
     private BigDecimal noteMission;
 
     private Long contactSocieteId;
