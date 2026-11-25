@@ -1,6 +1,7 @@
 package com.gpm.operations.domain;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -26,6 +27,12 @@ public class ParametreWO implements Serializable {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "montant_technicien", precision = 21, scale = 2)
+    private BigDecimal montantTechnicien;
+
+    @Column(name = "montant_chef_technicien", precision = 21, scale = 2)
+    private BigDecimal montantChefTechnicien;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -68,6 +75,32 @@ public class ParametreWO implements Serializable {
         this.description = description;
     }
 
+    public BigDecimal getMontantTechnicien() {
+        return this.montantTechnicien;
+    }
+
+    public ParametreWO montantTechnicien(BigDecimal montantTechnicien) {
+        this.setMontantTechnicien(montantTechnicien);
+        return this;
+    }
+
+    public void setMontantTechnicien(BigDecimal montantTechnicien) {
+        this.montantTechnicien = montantTechnicien;
+    }
+
+    public BigDecimal getMontantChefTechnicien() {
+        return this.montantChefTechnicien;
+    }
+
+    public ParametreWO montantChefTechnicien(BigDecimal montantChefTechnicien) {
+        this.setMontantChefTechnicien(montantChefTechnicien);
+        return this;
+    }
+
+    public void setMontantChefTechnicien(BigDecimal montantChefTechnicien) {
+        this.montantChefTechnicien = montantChefTechnicien;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -94,6 +127,8 @@ public class ParametreWO implements Serializable {
             "id=" + getId() +
             ", nom='" + getNom() + "'" +
             ", description='" + getDescription() + "'" +
+            ", montantTechnicien=" + getMontantTechnicien() +
+            ", montantChefTechnicien=" + getMontantChefTechnicien() +
             "}";
     }
 }
