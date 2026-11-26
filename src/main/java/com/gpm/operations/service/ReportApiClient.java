@@ -147,5 +147,25 @@ public class ReportApiClient {
             uniqueId
         ).getBody();
     }
+
+    /**
+     * POST /rapport-requests/editLineData?newValue=...&lineDataKey=...&lineDataType=...
+     * Body = RapportRequestDTO
+     */
+    public RemoteRapportRequestDTO editLineData(
+        RemoteRapportRequestDTO dto,
+        String newValue,
+        String lineDataKey,
+        String lineDataType
+    ) {
+        return rt.postForObject(
+            "/rapport-requests/editLineData?newValue={newValue}&lineDataKey={lineDataKey}&lineDataType={lineDataType}",
+            dto,
+            RemoteRapportRequestDTO.class,
+            newValue,
+            lineDataKey,
+            lineDataType
+        );
+    }
 }
 
