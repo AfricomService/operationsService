@@ -1,0 +1,29 @@
+{
+  "microserviceName": "operationsService",
+  "clientRootFolder": "operationsService",
+  "databaseType": "sql",
+  "fields": [
+    {
+      "fieldName": "sidType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "sidValue",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "sidKey",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "nomDescriptif",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [],
+  "service": "no",
+  "readOnly": false,
+  "pagination": "no",
+  "name": "AclSid",
+  "changelogDate": "20261119123124"
+}

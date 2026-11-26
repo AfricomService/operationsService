@@ -1,0 +1,33 @@
+{
+  "microserviceName": "operationsService",
+  "clientRootFolder": "operationsService",
+  "databaseType": "sql",
+  "fields": [
+    {
+      "fieldName": "canWrite",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "canRead",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "sidId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "objectId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "objectType",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [],
+  "service": "no",
+  "readOnly": false,
+  "pagination": "no",
+  "name": "AclEntry",
+  "changelogDate": "20261119122332"
+}

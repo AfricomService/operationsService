@@ -28,6 +28,8 @@
     <include file="config/liquibase/changelog/20261030134241_added_entity_ParametrageDeplacement.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20261030134636_added_entity_ParametreWO.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20261112121403_added_entity_WoArticles.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20261119122332_added_entity_AclEntry.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20261119123124_added_entity_AclSid.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20261118145653_added_entity_Mission.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20261119150146_added_entity_NoteFrais.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->

@@ -8,4 +8,8 @@ import org.mapstruct.*;
  * Mapper for the entity {@link WorkOrder} and its DTO {@link WorkOrderDTO}.
  */
 @Mapper(componentModel = "spring")
-public interface WorkOrderMapper extends EntityMapper<WorkOrderDTO, WorkOrder> {}
+public interface WorkOrderMapper extends EntityMapper<WorkOrderDTO, WorkOrder> {
+    @Mapping(target = "canRead", ignore = true)
+    @Mapping(target = "canWrite", ignore = true)
+    WorkOrderDTO toDto(WorkOrder workOrder);
+}
