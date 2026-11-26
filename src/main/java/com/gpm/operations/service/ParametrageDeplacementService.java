@@ -26,12 +26,16 @@ public class ParametrageDeplacementService {
 
     private final ParametrageDeplacementMapper parametrageDeplacementMapper;
 
+    private final WorkOrderStateService workOrderStateService;
+
     public ParametrageDeplacementService(
         ParametrageDeplacementRepository parametrageDeplacementRepository,
-        ParametrageDeplacementMapper parametrageDeplacementMapper
+        ParametrageDeplacementMapper parametrageDeplacementMapper,
+        WorkOrderStateService workOrderStateService
     ) {
         this.parametrageDeplacementRepository = parametrageDeplacementRepository;
         this.parametrageDeplacementMapper = parametrageDeplacementMapper;
+        this.workOrderStateService = workOrderStateService;
     }
 
     /**
@@ -124,11 +128,13 @@ public class ParametrageDeplacementService {
             })
             .collect(Collectors.toList());
 
-        return parametrageDeplacementRepository
-            .saveAll(entities)
-            .stream()
-            .map(parametrageDeplacementMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
+        List<ParametrageDeplacement> saved = parametrageDeplacementRepository.saveAll(entities);
+        parametrageDeplacementRepository.flush();
+
+        // Au statut Exécution travaux, les missions déjà créées suivent les options enregistrées (même transaction)
+        workOrderStateService.recalculerFraisMissions(workOrderId);
+
+        return saved.stream().map(parametrageDeplacementMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
     }
 
     /**

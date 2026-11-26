@@ -37,6 +37,8 @@
       "WoArticles",
       "AclEntry",
       "AclSid"
+      "Mission",
+      "NoteFrais"
     ],
     "entitySuffix": "",
     "gatewayServerPort": "8080",

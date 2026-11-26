@@ -127,6 +127,11 @@ public class WorkOrderDTO implements Serializable {
     public void setCanRead(boolean canRead) {
         this.canRead = canRead;
     }
+    private Long valideur;
+
+    private String typeMission;
+
+    private Long societeExecutrice;
 
     public Long getId() {
         return id;
@@ -416,6 +421,30 @@ public class WorkOrderDTO implements Serializable {
         this.nombreDeplacements = nombreDeplacements;
     }
 
+    public Long getValideur() {
+        return valideur;
+    }
+
+    public void setValideur(Long valideur) {
+        this.valideur = valideur;
+    }
+
+    public String getTypeMission() {
+        return typeMission;
+    }
+
+    public void setTypeMission(String typeMission) {
+        this.typeMission = typeMission;
+    }
+
+    public Long getSocieteExecutrice() {
+        return societeExecutrice;
+    }
+
+    public void setSocieteExecutrice(Long societeExecutrice) {
+        this.societeExecutrice = societeExecutrice;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -477,6 +506,9 @@ public class WorkOrderDTO implements Serializable {
             ", sousProjet='" + getSousProjet() + "'" +
             ", bonCommandeId=" + getBonCommandeId() +
             ", nombreDeplacements=" + getNombreDeplacements() +
+            ", valideur=" + getValideur() +
+            ", typeMission='" + getTypeMission() + "'" +
+            ", societeExecutrice=" + getSocieteExecutrice() +
             "}";
     }
 }
