@@ -149,19 +149,21 @@ public class ReportApiClient {
     }
 
     /**
-     * POST /rapport-requests/editLineData?newValue=...&lineDataKey=...&lineDataType=...
-     * Body = RapportRequestDTO
+     * POST /rapport-requests/editLineDataNewGPM
+     * Request params: rapportRequestId, newValue, lineDataKey, lineDataType
+     * No request body.
      */
-    public RemoteRapportRequestDTO editLineData(
-        RemoteRapportRequestDTO dto,
+    public RemoteRapportRequestDTO editLineDataNewGPM(
+        Long rapportRequestId,
         String newValue,
         String lineDataKey,
         String lineDataType
     ) {
         return rt.postForObject(
-            "/rapport-requests/editLineData?newValue={newValue}&lineDataKey={lineDataKey}&lineDataType={lineDataType}",
-            dto,
+            "/rapport-requests/editLineDataNewGPM?rapportRequestId={id}&newValue={value}&lineDataKey={key}&lineDataType={type}",
+            null,
             RemoteRapportRequestDTO.class,
+            rapportRequestId,
             newValue,
             lineDataKey,
             lineDataType

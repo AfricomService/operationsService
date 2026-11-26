@@ -117,4 +117,14 @@ public class TestController {
         List<RemoteRapportRequestSummaryDTO> result = reports.findByAlternativeReference(uniqueId);
         return result != null ? result : List.of();
     }
+
+    @PostMapping("/rapport-requests/editLineDataNewGPM")
+    public RemoteRapportRequestDTO editLineData(
+        @RequestParam("rapportRequestId") Long rapportRequestId,
+        @RequestParam("newValue") String newValue,
+        @RequestParam("lineDataKey") String lineDataKey,
+        @RequestParam("lineDataType") String lineDataType
+    ) {
+        return reports.editLineDataNewGPM(rapportRequestId, newValue, lineDataKey, lineDataType);
+    }
 }
