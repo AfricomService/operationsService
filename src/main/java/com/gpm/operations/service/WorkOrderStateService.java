@@ -160,6 +160,41 @@ public class WorkOrderStateService {
         }
     }
 
+    /**
+     * Recalcule fraisPersonnel et montantTotale des missions d'après les options cochées ENREGISTRÉES,
+     * au statut ExecutionTravaux uniquement (sans effet sinon). Le titre de la mission (MANAGER / TECHNIQUE) décide du montant.
+     * Les missions déjà rattachées à une note de frais ne sont pas touchées.
+     * Pas de contrôle de rôle : c'est la conséquence d'une modification des options, déjà enregistrée par l'appelant.
+     */
+    public void recalculerFraisMissions(Long workOrderId) {
+        WorkOrder workOrder = workOrderRepository.findById(workOrderId).orElse(null);
+        if (workOrder == null || workOrder.getStatut() != StatutWO.ExecutionTravaux) {
+            return;
+        }
+
+        List<Mission> missions = missionRepository.findByWorkorderId(workOrderId);
+        if (missions.isEmpty()) {
+            return;
+        }
+
+        List<ParametrageDeplacement> jours = parametrageDeplacementRepository.findByWorkOrderIdOrderByDateAsc(workOrderId);
+        Map<String, ParametreWO> parametresParNom = parametreWORepository
+            .findAll()
+            .stream()
+            .filter(p -> p.getNom() != null)
+            .collect(Collectors.toMap(ParametreWO::getNom, p -> p, (a, b) -> a));
+
+        for (Mission mission : missions) {
+            if (mission.getNoteFraisId() != null) {
+                continue;
+            }
+            boolean manager = TITRE_MANAGER.equals(mission.getTitreBeneficiaire());
+            mission.setFraisPersonnel(calculerFraisPersonnel(jours, parametresParNom, manager));
+            mission.setMontantTotale(calculerMontantTotale(mission));
+            missionRepository.save(mission);
+        }
+    }
+
     /** Bénéficiaires d'après la base : id du contact -> titre. Le responsable est posé en premier (il garde MANAGER s'il est aussi technicien). */
     private Map<Long, String> beneficiairesAttendus(WorkOrder workOrder) {
         Map<Long, String> expected = new LinkedHashMap<>();
