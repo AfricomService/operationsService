@@ -86,6 +86,7 @@ public class WorkOrderResource {
      * @param workOrderDTO the workOrderDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated workOrderDTO,
      * or with status {@code 400 (Bad Request)} if the workOrderDTO is not valid,
+     * or with status {@code 403 (Forbidden)} if the user has no write access,
      * or with status {@code 500 (Internal Server Error)} if the workOrderDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
@@ -120,6 +121,7 @@ public class WorkOrderResource {
      * @param workOrderDTO the workOrderDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated workOrderDTO,
      * or with status {@code 400 (Bad Request)} if the workOrderDTO is not valid,
+     * or with status {@code 403 (Forbidden)} if the user has no write access,
      * or with status {@code 404 (Not Found)} if the workOrderDTO is not found,
      * or with status {@code 500 (Internal Server Error)} if the workOrderDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
@@ -150,7 +152,7 @@ public class WorkOrderResource {
     }
 
     /**
-     * {@code GET  /work-orders} : get all the workOrders.
+     * {@code GET  /work-orders} : get all the workOrders accessible to the current user.
      *
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of workOrders in body.
